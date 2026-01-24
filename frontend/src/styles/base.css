@@ -1,0 +1,213 @@
+/* =========================================
+   ZARA / H&M PRODUCTION THEME
+   SAFE WITH BOOTSTRAP • HIGH CONTRAST
+========================================= */
+
+/* Font */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800;900&display=swap');
+
+/* =========================================
+   THEME VARIABLES
+========================================= */
+
+:root {
+    /* 🌞 Light theme */
+    --bg: #ffffff;
+    --text: #000000;
+    /* Pure Black for sharpness */
+    --muted: #555555;
+    --border: #e5e5e5;
+    --light-bg: #f9f9f9;
+    --card-bg: #ffffff;
+    --accent: #000000;
+
+    /* 🔥 H&M / Supreme Red Accent */
+    --hm-red: #E50010;
+
+    --transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* 🌑 Dark theme (High Contrast) */
+.dark {
+    --bg: #000000;
+    /* Pure Black, not dark gray */
+    --text: #ffffff;
+    /* Pure White */
+    --muted: #e0e0e0;
+    /* Light gray for secondary text */
+    --border: #333333;
+    --light-bg: #111111;
+    --card-bg: #000000;
+    --accent: #ffffff;
+}
+
+/* -----------------------------------------
+   Global Reset
+----------------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* -----------------------------------------
+   Base
+----------------------------------------- */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    /* Sharp text on Mac */
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+/* -----------------------------------------
+   Layout
+----------------------------------------- */
+main {
+    min-height: 80vh;
+}
+
+/* Page spacing utility */
+.page-section {
+    padding: 60px 0;
+}
+
+/* HERO SAFETY */
+.hero,
+.hero-slider {
+    margin-top: 0;
+}
+
+/* =========================================
+   DARK MODE POLISH (LUXURY)
+========================================= */
+
+.dark .zara-header,
+.dark .footer,
+.dark .cart-summary,
+.dark .order-summary,
+.dark .stat-card,
+.dark .analytics-card {
+    background: var(--card-bg);
+    border-color: var(--border);
+}
+
+.dark a {
+    color: var(--text);
+}
+
+.dark .zara-nav-link::after {
+    background: var(--accent);
+}
+
+/* =========================================
+   DARK MODE – CONTRAST FIX (CRITICAL)
+   Prevents "faded" text look
+========================================= */
+
+/* Header actions */
+.dark .zara-action-link,
+.dark .zara-hamburger,
+.dark .zara-cart-icon {
+    color: #ffffff !important;
+}
+
+.dark .zara-hamburger {
+    font-size: 24px;
+}
+
+/* Mobile menu links */
+.dark .zara-overlay {
+    background: #000000;
+}
+
+.dark .zara-overlay-nav a,
+.dark .zara-overlay-nav button {
+    color: #ffffff;
+    border-bottom-color: #333;
+}
+
+/* Mobile menu close button */
+.dark .zara-overlay-close {
+    color: #ffffff;
+}
+
+/* =========================================
+   DARK MODE – PRODUCT CARD FIX
+========================================= */
+
+/* Product card base */
+.dark .product-card {
+    background: transparent;
+}
+
+/* Product name - Force White */
+.dark .product-name {
+    color: #ffffff !important;
+    opacity: 1;
+    font-weight: 500;
+}
+
+/* Product price - Force White */
+.dark .product-price {
+    color: #ffffff !important;
+    font-weight: 800;
+}
+
+/* Quick view text */
+.dark .product-quick-view {
+    background: rgba(255, 255, 255, 0.9);
+    color: #000000;
+}
+
+/* =========================================
+   CART ICON & BADGES
+========================================= */
+
+.zara-cart-icon {
+    position: relative;
+    font-size: 20px;
+    line-height: 1;
+    color: var(--text);
+}
+
+/* Quantity badge (Standard Red) */
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background: var(--hm-red);
+    /* 🔥 H&M Red */
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 50%;
+    min-width: 18px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode badge - Keep it Red for Contrast */
+.dark .cart-badge {
+    background: var(--hm-red);
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(229, 0, 16, 0.4);
+    /* Subtle glow */
+}

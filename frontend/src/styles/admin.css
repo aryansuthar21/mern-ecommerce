@@ -1,0 +1,394 @@
+/* =========================================
+   ADMIN PANEL — ZARA / H&M STYLE
+   CLEAN • PROFESSIONAL • PRODUCTION READY
+========================================= */
+
+/* -----------------------------------------
+   PAGE WRAPPER
+----------------------------------------- */
+.admin-page,
+.admin-dashboard {
+    max-width: 1400px;
+    margin: 80px auto;
+    padding: 0 40px;
+}
+
+/* Titles */
+.admin-title {
+    font-size: 2rem;
+    font-weight: 800;
+    /* Bolder for editorial look */
+    letter-spacing: -0.5px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    color: #000;
+}
+
+/* -----------------------------------------
+   HEADER ACTIONS
+----------------------------------------- */
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+/* Buttons */
+.admin-create-btn,
+.admin-save-btn {
+    padding: 12px 24px;
+    background: #E50010;
+    /* 🔥 H&M Red */
+    color: #fff;
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(229, 0, 16, 0.2);
+}
+
+.admin-create-btn:hover,
+.admin-save-btn:hover {
+    background: #b0000c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(229, 0, 16, 0.3);
+}
+
+/* Standard Action Button (Edit/Details) */
+.admin-action-btn {
+    padding: 8px 16px;
+    background: #000;
+    color: #fff;
+    border: 1px solid #000;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-right: 8px;
+}
+
+.admin-action-btn:hover {
+    background: #333;
+    border-color: #333;
+}
+
+/* Danger Button (Delete) */
+.admin-action-btn.danger {
+    background: transparent;
+    color: #E50010;
+    border-color: #E50010;
+}
+
+.admin-action-btn.danger:hover {
+    background: #E50010;
+    color: #fff;
+}
+
+/* Back link */
+.admin-back {
+    display: inline-block;
+    margin-bottom: 24px;
+    font-size: 0.75rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    border-bottom: 1px solid #000;
+}
+
+/* -----------------------------------------
+   TABLES (PRODUCTS & ORDERS)
+----------------------------------------- */
+.admin-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-top: 1px solid #e5e5e5;
+    margin-bottom: 40px;
+}
+
+/* Standard table */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.admin-table th {
+    text-align: left;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 800;
+    padding: 16px 12px;
+    border-bottom: 2px solid #000;
+    color: #000;
+}
+
+.admin-table td {
+    padding: 18px 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.85rem;
+    color: #333;
+}
+
+/* Grid table (orders) */
+.admin-table-head,
+.admin-table-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1.5fr 1fr 1fr 1fr 1.5fr 0.5fr;
+    align-items: center;
+    padding: 18px 0;
+}
+
+.admin-table-head {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: #666;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.admin-table-row {
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.85rem;
+}
+
+/* Links inside tables */
+.admin-link {
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #000;
+    font-weight: 700;
+    border-bottom: 1px solid transparent;
+    width: fit-content;
+    transition: border-color 0.2s;
+}
+
+.admin-link:hover {
+    border-color: #000;
+}
+
+/* -----------------------------------------
+   EDIT FORMS
+----------------------------------------- */
+.admin-edit-wrapper {
+    max-width: 700px;
+    margin: 0 auto;
+    /* Centered form */
+}
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.admin-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-group label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+    color: #000;
+}
+
+.admin-group input,
+.admin-group textarea,
+.admin-group select {
+    padding: 12px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    font-size: 0.95rem;
+    outline: none;
+    background: transparent;
+    transition: border-color 0.3s;
+    font-family: inherit;
+}
+
+.admin-group input:focus,
+.admin-group textarea:focus,
+.admin-group select:focus {
+    border-bottom-color: #000;
+}
+
+/* -----------------------------------------
+   DASHBOARD STATS
+----------------------------------------- */
+.admin-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 30px;
+    margin-bottom: 70px;
+}
+
+.stat-card {
+    border: 1px solid #e5e5e5;
+    padding: 30px;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    border-color: #000;
+}
+
+.stat-card span {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #666;
+}
+
+.stat-card strong {
+    display: block;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-top: 10px;
+    color: #000;
+}
+
+/* Charts */
+.admin-chart h2 {
+    font-size: 1rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.chart-wrapper {
+    width: 100%;
+    height: 340px;
+    border: 1px solid #e5e5e5;
+    padding: 20px;
+}
+
+/* -----------------------------------------
+   ANALYTICS
+----------------------------------------- */
+.admin-analytics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 40px;
+    margin-top: 60px;
+}
+
+.analytics-card {
+    border: 1px solid #e5e5e5;
+    padding: 30px;
+}
+
+.analytics-card h2 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* =========================================
+   🌑 DARK MODE OPTIMIZATION
+   High Contrast & Professional
+========================================= */
+
+/* Backgrounds & Text */
+html.dark .admin-page,
+html.dark .admin-dashboard {
+    color: #ffffff;
+}
+
+html.dark .admin-title {
+    color: #ffffff;
+}
+
+/* Inputs */
+html.dark .admin-group label {
+    color: #cccccc;
+}
+
+html.dark .admin-group input,
+html.dark .admin-group textarea,
+html.dark .admin-group select {
+    color: #ffffff;
+    border-bottom-color: #444;
+}
+
+html.dark .admin-group input:focus {
+    border-bottom-color: #ffffff;
+}
+
+/* Tables */
+html.dark .admin-table th {
+    border-bottom-color: #ffffff;
+    color: #ffffff;
+}
+
+html.dark .admin-table td {
+    border-bottom-color: #333;
+    color: #dddddd;
+}
+
+html.dark .admin-link {
+    color: #ffffff;
+}
+
+html.dark .admin-link:hover {
+    border-color: #ffffff;
+}
+
+/* Stats & Cards */
+html.dark .stat-card,
+html.dark .analytics-card,
+html.dark .chart-wrapper {
+    background: #000;
+    /* Pure Black */
+    border-color: #333;
+}
+
+html.dark .stat-card:hover {
+    border-color: #ffffff;
+}
+
+html.dark .stat-card strong {
+    color: #ffffff;
+}
+
+html.dark .stat-card span {
+    color: #999;
+}
+
+/* Buttons in Dark Mode */
+html.dark .admin-action-btn {
+    background: #ffffff;
+    color: #000000;
+    border-color: #ffffff;
+}
+
+html.dark .admin-action-btn:hover {
+    background: #cccccc;
+}
+
+html.dark .admin-back {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+/* Keep Red Actions Popping */
+html.dark .admin-create-btn,
+html.dark .admin-save-btn {
+    background: #E50010;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(229, 0, 16, 0.25);
+}

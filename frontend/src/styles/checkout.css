@@ -1,0 +1,336 @@
+/* =========================================
+   CHECKOUT FLOW — ZARA / H&M STYLE
+   PAYMENT • SHIPPING • PLACE ORDER
+========================================= */
+
+/* -----------------------------------------
+   BASE PAGE
+----------------------------------------- */
+.checkout-page {
+    max-width: 600px;
+    margin: 100px auto;
+    padding: 0 20px;
+    min-height: 60vh;
+}
+
+.checkout-page.wide {
+    max-width: 1200px;
+    margin: 80px auto;
+    padding: 0 40px;
+}
+
+/* Title */
+.checkout-title {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 50px;
+    text-align: center;
+    text-transform: uppercase;
+    color: #000;
+}
+
+/* -----------------------------------------
+   PAYMENT SCREEN
+----------------------------------------- */
+.payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.payment-option {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    cursor: pointer;
+    border-bottom: 1px solid #e5e5e5;
+    padding-bottom: 24px;
+    transition: all 0.2s ease;
+}
+
+.payment-option:hover {
+    border-color: #000;
+}
+
+.payment-option:last-child {
+    border-bottom: none;
+}
+
+.payment-option input {
+    margin-top: 4px;
+    accent-color: #000;
+    transform: scale(1.2);
+}
+
+.payment-option span {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #000;
+}
+
+.payment-option small {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 6px;
+    font-weight: 400;
+}
+
+/* CTA Button (H&M Red) */
+.checkout-btn {
+    margin-top: 40px;
+    width: 100%;
+    padding: 18px;
+    background: #E50010;
+    /* 🔥 H&M Red */
+    color: #fff;
+    border: none;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(229, 0, 16, 0.2);
+}
+
+.checkout-btn:hover {
+    background: #b0000c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(229, 0, 16, 0.3);
+}
+
+/* -----------------------------------------
+   SHIPPING SCREEN
+----------------------------------------- */
+.shipping-form {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Input groups */
+.input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 8px;
+}
+
+.input-group input {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    padding: 12px 0;
+    font-size: 1rem;
+    background: transparent;
+    transition: border-color 0.3s;
+    border-radius: 0;
+}
+
+.input-group input:focus {
+    outline: none;
+    border-color: #000;
+}
+
+/* -----------------------------------------
+   PLACE ORDER SCREEN
+----------------------------------------- */
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 80px;
+}
+
+.checkout-section {
+    margin-bottom: 48px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 24px;
+}
+
+.checkout-section h3 {
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    font-weight: 800;
+    color: #000;
+}
+
+.checkout-section p {
+    font-size: 0.9rem;
+    color: #444;
+    line-height: 1.6;
+}
+
+/* Items list */
+.checkout-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.checkout-item a {
+    color: #000;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* -----------------------------------------
+   ORDER SUMMARY
+----------------------------------------- */
+.order-summary {
+    border: 1px solid #e5e5e5;
+    padding: 40px;
+    background: #fff;
+    height: fit-content;
+}
+
+.order-summary h2 {
+    font-size: 1rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+}
+
+.summary-line {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.1rem;
+    font-weight: 800;
+    border-top: 1px solid #000;
+    padding-top: 20px;
+    margin-top: 24px;
+    color: #000;
+}
+
+/* -----------------------------------------
+   MOBILE REFINEMENTS
+----------------------------------------- */
+@media (max-width: 900px) {
+    .checkout-layout {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .checkout-page.wide {
+        padding: 0 20px;
+    }
+}
+
+/* =========================================
+   🌑 DARK MODE OVERRIDES
+   High Contrast & Professional
+========================================= */
+
+/* Backgrounds & Text */
+html.dark .checkout-page {
+    color: #ffffff;
+}
+
+html.dark .checkout-title {
+    color: #ffffff;
+}
+
+/* Inputs */
+html.dark .input-group label {
+    color: #cccccc;
+}
+
+html.dark .input-group input {
+    color: #ffffff;
+    border-bottom-color: #444;
+}
+
+html.dark .input-group input:focus {
+    border-bottom-color: #ffffff;
+}
+
+/* Payment Options */
+html.dark .payment-option {
+    border-bottom-color: #333;
+}
+
+html.dark .payment-option:hover {
+    border-color: #ffffff;
+}
+
+html.dark .payment-option span {
+    color: #ffffff;
+}
+
+html.dark .payment-option small {
+    color: #999;
+}
+
+html.dark .payment-option input {
+    accent-color: #ffffff;
+}
+
+/* Order Summary Box */
+html.dark .order-summary {
+    background: #000;
+    border-color: #333;
+}
+
+html.dark .order-summary h2 {
+    color: #ffffff;
+}
+
+html.dark .summary-line {
+    color: #cccccc;
+}
+
+html.dark .summary-total {
+    border-top-color: #ffffff;
+    color: #ffffff;
+}
+
+/* Layout Items */
+html.dark .checkout-section {
+    border-bottom-color: #333;
+}
+
+html.dark .checkout-section h3 {
+    color: #ffffff;
+}
+
+html.dark .checkout-section p {
+    color: #bbbbbb;
+}
+
+html.dark .checkout-item {
+    color: #cccccc;
+}
+
+html.dark .checkout-item a {
+    color: #ffffff;
+}
+
+/* Keep Button Red */
+html.dark .checkout-btn {
+    background: #E50010;
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(229, 0, 16, 0.25);
+}

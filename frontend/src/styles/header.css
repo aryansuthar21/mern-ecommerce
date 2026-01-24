@@ -1,0 +1,279 @@
+/* =========================================
+   ZARA / H&M HEADER (FINAL SEARCH FIX)
+========================================= */
+
+/* -----------------------------------------
+   HEADER WRAPPER
+----------------------------------------- */
+.zara-header {
+    position: sticky;
+    top: 0;
+    z-index: 2000;
+    background: #ffffff;
+    border-bottom: 1px solid #e4e4e4;
+    transition: all 0.3s ease;
+}
+
+.zara-header-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 40px;
+    height: 80px;
+
+    /* Grid Layout: Logo | Nav | Actions */
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 40px;
+}
+
+/* -----------------------------------------
+   LOGO
+----------------------------------------- */
+.zara-logo {
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: -2px;
+    color: #E50010;
+    text-decoration: none;
+    white-space: nowrap;
+    z-index: 2005;
+}
+
+/* -----------------------------------------
+   DESKTOP NAV
+----------------------------------------- */
+.zara-nav {
+    display: flex;
+    gap: 40px;
+    height: 100%;
+    justify-content: flex-start;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    cursor: pointer;
+    position: static;
+}
+
+.zara-nav-link {
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    padding: 28px 0;
+    color: #000;
+}
+
+.zara-nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 24px;
+    width: 0%;
+    height: 2px;
+    background: #000;
+    transition: width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.nav-item:hover .zara-nav-link::after {
+    width: 100%;
+}
+
+/* -----------------------------------------
+   SIDEBAR MEGA MENU (DRAWER)
+----------------------------------------- */
+.dropdown {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    bottom: 0;
+    width: 320px;
+    background: #ffffff;
+    border-right: 1px solid #e5e5e5;
+    padding: 40px;
+
+    transform: translateX(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+
+    z-index: 1900;
+    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
+}
+
+.nav-item:hover .dropdown {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+.dropdown-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.dropdown strong {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #999;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.dropdown a {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #000;
+    text-decoration: none;
+    transition: transform 0.2s ease, color 0.2s ease;
+    padding-bottom: 8px;
+    border-bottom: 1px solid transparent;
+}
+
+.dropdown a:hover {
+    color: #E50010;
+    transform: translateX(10px);
+    border-bottom-color: #f0f0f0;
+}
+
+.empty-msg {
+    font-size: 0.9rem;
+    color: #777;
+    font-style: italic;
+}
+
+/* -----------------------------------------
+   ACTIONS (SEARCH, CART, ETC)
+----------------------------------------- */
+.zara-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 24px;
+    /* Default gap for Desktop */
+}
+
+.zara-actions button,
+.zara-cart-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: #000;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    /* Reset padding */
+}
+
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: #E50010;
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 50%;
+    font-weight: 700;
+}
+
+.zara-hamburger {
+    display: block !important;
+    font-size: 1.6rem;
+}
+
+/* =========================================
+   📱 MOBILE & TABLET OPTIMIZATION
+   Fixes crowding issues
+========================================= */
+
+@media (max-width: 992px) {
+    .zara-nav {
+        display: none;
+    }
+
+    .zara-header-inner {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        /* Standard Mobile Padding */
+    }
+}
+
+/* 🔥 CRITICAL FIX FOR SMALL SCREENS */
+@media (max-width: 600px) {
+    .zara-header-inner {
+        padding: 0 16px;
+        /* Reduce side padding to fit content */
+        height: 64px;
+        gap: 0;
+    }
+
+    .zara-logo {
+        font-size: 1.4rem;
+        /* Smaller Logo */
+    }
+
+    .zara-actions {
+        gap: 12px;
+        /* ✅ TIGHTER GAP (Was 24px) */
+    }
+
+    /* Slightly smaller icons */
+    .zara-actions button,
+    .zara-cart-icon {
+        font-size: 1.1rem;
+    }
+
+    .zara-hamburger {
+        font-size: 1.4rem;
+        margin-left: 4px;
+    }
+}
+
+/* =========================================
+   🌑 DARK MODE HEADER
+========================================= */
+html.dark .zara-header,
+html.dark .dropdown {
+    background: #000000;
+    border-color: #333;
+}
+
+html.dark .zara-nav-link,
+html.dark .zara-actions button,
+html.dark .zara-cart-icon,
+html.dark .zara-hamburger {
+    color: #ffffff;
+}
+
+html.dark .zara-nav-link::after {
+    background: #ffffff;
+}
+
+html.dark .dropdown strong {
+    color: #666;
+}
+
+html.dark .dropdown a {
+    color: #ffffff;
+}
+
+html.dark .dropdown a:hover {
+    color: #E50010;
+    border-bottom-color: #333;
+}
+
+html.dark .zara-logo {
+    color: #E50010;
+}

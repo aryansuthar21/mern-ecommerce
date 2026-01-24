@@ -1,0 +1,203 @@
+/* =========================================
+   H&M STYLE SEARCH OVERLAY
+   MINIMAL • FULL WIDTH • SLIDE DOWN
+========================================= */
+
+/* 1. The Backdrop (Dimmed Background) */
+.search-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 2999;
+    /* Below Drawer, Above Header */
+    backdrop-filter: blur(2px);
+}
+
+/* 2. The Drawer (White Box at Top) */
+.search-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    z-index: 3000;
+    padding: 30px 0 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 3. The Input Form */
+.search-form {
+    display: flex;
+    align-items: center;
+    border-bottom: 2px solid #e5e5e5;
+    padding-bottom: 10px;
+    position: relative;
+}
+
+.search-form:focus-within {
+    border-bottom-color: #000;
+}
+
+/* Input Field */
+.search-input {
+    flex: 1;
+    border: none;
+    font-size: 1.5rem;
+    /* Big, Editorial Font */
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    outline: none;
+    background: transparent;
+    color: #000;
+}
+
+.search-input::placeholder {
+    color: #ccc;
+    font-weight: 400;
+}
+
+/* Icons */
+.search-icon-btn {
+    background: none;
+    border: none;
+    color: #000;
+    padding: 0 10px;
+    cursor: pointer;
+}
+
+.search-close-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #999;
+    cursor: pointer;
+    padding: 0 10px;
+    transition: color 0.3s;
+}
+
+.search-close-btn:hover {
+    color: #E50010;
+    /* H&M Red */
+}
+
+/* 4. Trending Hints */
+.search-hints {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #666;
+    padding-left: 50px;
+    /* Align with text input */
+}
+
+.search-hints span {
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.search-hints button {
+    background: #f5f5f5;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.search-hints button:hover {
+    background: #000;
+    color: #fff;
+}
+
+/* =========================================
+   📱 MOBILE OPTIMIZATION
+========================================= */
+@media (max-width: 600px) {
+    .search-drawer {
+        padding: 20px 0 30px;
+        /* Less vertical padding */
+    }
+
+    .search-input {
+        font-size: 1.1rem;
+        /* Smaller font for mobile */
+        padding: 10px;
+        /* Less horizontal padding */
+    }
+
+    .search-container {
+        padding: 0 16px;
+        gap: 16px;
+    }
+
+    .search-icon-btn {
+        padding: 0;
+        /* Remove padding to save space */
+    }
+
+    .search-hints {
+        padding-left: 0;
+        /* Remove indent on mobile */
+        flex-wrap: wrap;
+        /* Allow tags to wrap to next line */
+        gap: 10px;
+        justify-content: center;
+        /* Center hints */
+    }
+
+    .search-hints span {
+        width: 100%;
+        /* Force "Trending" to own line or center it */
+        text-align: center;
+        margin-bottom: 4px;
+        font-size: 0.75rem;
+    }
+}
+
+/* =========================================
+   🌑 DARK MODE SEARCH
+========================================= */
+html.dark .search-drawer {
+    background: #111;
+    border-bottom: 1px solid #333;
+}
+
+html.dark .search-input {
+    color: #fff;
+}
+
+html.dark .search-form {
+    border-bottom-color: #444;
+}
+
+html.dark .search-form:focus-within {
+    border-bottom-color: #fff;
+}
+
+html.dark .search-icon-btn {
+    color: #fff;
+}
+
+html.dark .search-hints button {
+    background: #222;
+    color: #ccc;
+}
+
+html.dark .search-hints button:hover {
+    background: #fff;
+    color: #000;
+}

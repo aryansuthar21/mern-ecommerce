@@ -1,0 +1,333 @@
+/* =========================================
+   AUTH & PROFILE PAGES
+   ZARA / H&M STYLE — PRODUCTION READY
+========================================= */
+
+/* -----------------------------------------
+   AUTH PAGE WRAPPER
+----------------------------------------- */
+.auth-page {
+    min-height: calc(100vh - 160px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 20px;
+    background: #fdfdfd;
+}
+
+.auth-box {
+    width: 100%;
+    max-width: 420px;
+    padding: 40px;
+    border: 1px solid #e5e5e5;
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+/* Titles */
+.auth-title {
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.auth-subtitle {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+/* -----------------------------------------
+   MESSAGES
+----------------------------------------- */
+.auth-error {
+    background: #fff0f0;
+    color: #E50010;
+    padding: 12px 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    border: 1px solid #ffcccc;
+    text-align: center;
+}
+
+.auth-loading {
+    font-size: 0.8rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #666;
+}
+
+/* -----------------------------------------
+   AUTH FORM
+----------------------------------------- */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.auth-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-group label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+    color: #000;
+}
+
+.auth-group input {
+    padding: 12px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    font-size: 1rem;
+    outline: none;
+    background: transparent;
+    transition: border-color 0.3s ease;
+}
+
+.auth-group input::placeholder {
+    color: #ccc;
+}
+
+.auth-group input:focus {
+    border-bottom-color: #000;
+}
+
+/* CTA Button (H&M Red) */
+.auth-btn {
+    margin-top: 12px;
+    padding: 16px;
+    background: #E50010;
+    /* 🔥 H&M Red */
+    color: #fff;
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 4px 12px rgba(229, 0, 16, 0.2);
+}
+
+.auth-btn:hover {
+    background: #b0000c;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(229, 0, 16, 0.3);
+}
+
+.auth-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    background: #999;
+}
+
+/* -----------------------------------------
+   DIVIDER & GOOGLE
+----------------------------------------- */
+.auth-divider {
+    display: flex;
+    align-items: center;
+    margin: 24px 0;
+    color: #ccc;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: #eee;
+}
+
+.auth-divider span {
+    padding: 0 10px;
+}
+
+.google-login-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+}
+
+/* Switch link */
+.auth-switch {
+    margin-top: 16px;
+    font-size: 0.8rem;
+    text-align: center;
+    color: #555;
+}
+
+.auth-switch a {
+    font-weight: 800;
+    text-decoration: none;
+    color: #000;
+    border-bottom: 1px solid #000;
+    margin-left: 5px;
+}
+
+/* =========================================
+   PROFILE PAGE
+========================================= */
+
+.profile-page {
+    min-height: calc(100vh - 160px);
+    padding: 80px 20px;
+    display: flex;
+    justify-content: center;
+    background: #fff;
+}
+
+.profile-wrapper {
+    width: 100%;
+    max-width: 520px;
+}
+
+.profile-title {
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* Profile form */
+.profile-form {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+.profile-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-group label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.profile-group input {
+    padding: 12px 0;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    font-size: 1rem;
+    outline: none;
+    background: transparent;
+    transition: border-color 0.3s;
+}
+
+.profile-group input:focus {
+    border-bottom-color: #000;
+}
+
+/* Save button (Black for Profile) */
+.profile-btn {
+    margin-top: 28px;
+    padding: 16px;
+    background: #000;
+    color: #fff;
+    border: none;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.profile-btn:hover {
+    background: #333;
+}
+
+/* =========================================
+   🌑 DARK MODE OVERRIDES
+========================================= */
+
+/* Wrappers */
+html.dark .auth-page,
+html.dark .profile-page {
+    background: #000000;
+}
+
+html.dark .auth-box {
+    background: #000000;
+    border-color: #333;
+    box-shadow: none;
+}
+
+/* Texts */
+html.dark .auth-title,
+html.dark .profile-title {
+    color: #ffffff;
+}
+
+html.dark .auth-subtitle,
+html.dark .auth-switch {
+    color: #bbbbbb;
+}
+
+html.dark .auth-switch a {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+/* Inputs */
+html.dark .auth-group label,
+html.dark .profile-group label {
+    color: #cccccc;
+}
+
+html.dark .auth-group input,
+html.dark .profile-group input {
+    color: #ffffff;
+    border-bottom-color: #444;
+}
+
+html.dark .auth-group input:focus,
+html.dark .profile-group input:focus {
+    border-bottom-color: #ffffff;
+}
+
+html.dark .auth-group input::placeholder {
+    color: #555;
+}
+
+/* Dividers */
+html.dark .auth-divider {
+    color: #555;
+}
+
+html.dark .auth-divider::before,
+html.dark .auth-divider::after {
+    background: #333;
+}
+
+/* Profile Button in Dark Mode */
+html.dark .profile-btn {
+    background: #ffffff;
+    color: #000000;
+}
+
+html.dark .profile-btn:hover {
+    background: #e0e0e0;
+}

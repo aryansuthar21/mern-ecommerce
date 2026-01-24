@@ -1,0 +1,15 @@
+/* frontend/src/App.css */
+
+#root {
+  max-width: 100% !important;
+  /* Overrides the 1280px limit */
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  /* Overrides the center alignment */
+}
+
+.main-content {
+  min-height: 80vh;
+  padding: 0px 0;
+}

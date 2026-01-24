@@ -1,0 +1,273 @@
+/* =========================================
+   ZARA / H&M STYLE FILTER SIDEBAR
+   CLEAN • MINIMAL • STICKY
+========================================= */
+
+/* Desktop: Sticky Sidebar */
+.filter-sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 100px;
+    /* Below header */
+    height: fit-content;
+    padding-right: 40px;
+    background: #fff;
+    z-index: 900;
+}
+
+/* Titles */
+.filter-title {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    color: #000;
+}
+
+.filter-group {
+    margin-bottom: 40px;
+    border-bottom: 1px solid #f5f5f5;
+    padding-bottom: 30px;
+}
+
+.filter-group:last-of-type {
+    border-bottom: none;
+}
+
+/* Custom Radio Buttons */
+.radio-container {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding-left: 0;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #555;
+    user-select: none;
+}
+
+.radio-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.radio-checkmark {
+    height: 16px;
+    width: 16px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+}
+
+/* Checked State (Red Dot) */
+.radio-container input:checked~.radio-checkmark {
+    border-color: #E50010;
+}
+
+.radio-container input:checked~.radio-checkmark::after {
+    content: "";
+    position: absolute;
+    display: block;
+    top: 3px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #E50010;
+}
+
+/* Price Inputs */
+.price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.input-wrap {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    background: #fff;
+    flex: 1;
+}
+
+.input-wrap span {
+    font-size: 0.8rem;
+    color: #999;
+    margin-right: 4px;
+}
+
+.input-wrap input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Buttons */
+.btn-apply {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-apply:hover {
+    background: #333;
+}
+
+.btn-clear {
+    width: 100%;
+    background: transparent;
+    border: 1px solid #e5e5e5;
+    color: #000;
+    padding: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-clear:hover {
+    border-color: #000;
+}
+
+/* -----------------------------------------
+   MOBILE DRAWER MODE
+----------------------------------------- */
+.filter-backdrop {
+    display: none;
+}
+
+.filter-header-mobile {
+    display: none;
+}
+
+@media (max-width: 900px) {
+
+    /* Hide Sidebar by default on mobile */
+    .filter-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 85%;
+        max-width: 350px;
+        background: #fff;
+        z-index: 4000;
+        padding: 24px;
+        transform: translateX(-100%);
+        transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        overflow-y: auto;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .filter-sidebar.open {
+        transform: translateX(0);
+    }
+
+    /* Backdrop */
+    .filter-backdrop {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 3999;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s;
+        backdrop-filter: blur(2px);
+    }
+
+    .filter-backdrop.open {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    /* Mobile Header inside Sidebar */
+    .filter-header-mobile {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 16px;
+    }
+
+    .filter-header-mobile h3 {
+        font-size: 1.1rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin: 0;
+    }
+
+    .filter-header-mobile button {
+        background: none;
+        border: none;
+        font-size: 2rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+}
+
+/* -----------------------------------------
+   🌑 DARK MODE OVERRIDES
+----------------------------------------- */
+html.dark .filter-sidebar {
+    background: #000;
+    border-right: 1px solid #333;
+}
+
+html.dark .filter-title,
+html.dark .filter-header-mobile h3 {
+    color: #fff;
+}
+
+html.dark .filter-group {
+    border-bottom-color: #333;
+}
+
+html.dark .radio-container {
+    color: #ccc;
+}
+
+html.dark .input-wrap {
+    background: #111;
+    border-color: #444;
+}
+
+html.dark .input-wrap input {
+    background: transparent;
+    color: #fff;
+}
+
+html.dark .btn-apply {
+    background: #E50010;
+    color: #fff;
+}
+
+html.dark .btn-clear {
+    border-color: #444;
+    color: #fff;
+}
+
+html.dark .filter-header-mobile button {
+    color: #fff;
+}

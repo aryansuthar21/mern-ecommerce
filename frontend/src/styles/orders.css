@@ -1,0 +1,315 @@
+/* =========================================
+   ORDERS – ZARA / H&M STYLE
+   CLEAN • CONSISTENT • PRODUCTION READY
+========================================= */
+
+/* -----------------------------------------
+   PAGE WRAPPER
+----------------------------------------- */
+.account-page,
+.zara-page {
+    max-width: 1100px;
+    margin: 80px auto;
+    padding: 0 20px;
+    min-height: 60vh;
+}
+
+/* Titles */
+.account-title,
+.zara-title {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    color: #000;
+}
+
+/* Messages */
+.account-message,
+.zara-message {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.account-error,
+.zara-error {
+    font-size: 0.9rem;
+    color: #E50010;
+    /* H&M Red for errors */
+    font-weight: 600;
+    background: #fff0f0;
+    padding: 10px;
+    border: 1px solid #ffcccc;
+}
+
+/* =========================================
+   TABLE STYLE ORDERS (DESKTOP)
+========================================= */
+
+.orders-list {
+    border-top: 1px solid #e5e5e5;
+    margin-top: 20px;
+}
+
+.orders-header,
+.orders-row {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 0.5fr;
+    align-items: center;
+    padding: 18px 0;
+}
+
+.orders-header {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: #000;
+    border-bottom: 2px solid #000;
+}
+
+.orders-row {
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.order-id {
+    font-weight: 600;
+    color: #000;
+}
+
+/* =========================================
+   ORDER STATUS (UNIFIED)
+========================================= */
+
+.order-status {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    /* No border radius for sharper Zara look */
+}
+
+/* Paid / Delivered */
+.order-status.paid {
+    background: #000;
+    color: #fff;
+}
+
+/* Pending / Not Paid (H&M Red) */
+.order-status.pending,
+.order-status.not-paid {
+    background: #f4f4f4;
+    color: #E50010;
+    /* Red Text for attention */
+    border: 1px solid #eee;
+}
+
+/* View link */
+.order-link {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #000;
+    font-weight: 700;
+    text-decoration: underline;
+    width: fit-content;
+}
+
+.order-link:hover {
+    color: #555;
+    text-decoration: none;
+}
+
+/* =========================================
+   CARD STYLE ORDERS (MOBILE / MODERN)
+========================================= */
+
+.zara-orders {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.zara-order-card {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    align-items: center;
+    padding: 24px 28px;
+    border: 1px solid #e5e5e5;
+    background: #fff;
+    transition: all 0.25s ease;
+}
+
+.zara-order-card:hover {
+    border-color: #000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Left */
+.order-left p {
+    margin: 0;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+.order-date {
+    font-size: 0.8rem;
+    color: #777;
+    margin-top: 6px;
+    font-weight: 400;
+}
+
+/* Center */
+.order-center {
+    text-align: center;
+}
+
+.order-price {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: #000;
+}
+
+/* Right */
+.order-right {
+    text-align: right;
+}
+
+.zara-link {
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    color: #000;
+    font-weight: 700;
+    border-bottom: 1px solid #000;
+    transition: all 0.2s ease;
+}
+
+.zara-link:hover {
+    opacity: 0.6;
+}
+
+/* =========================================
+   MOBILE REFINEMENTS
+========================================= */
+
+@media (max-width: 768px) {
+
+    .orders-header {
+        display: none;
+    }
+
+    .orders-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 24px 0;
+        align-items: flex-start;
+    }
+
+    .order-id::before {
+        content: 'ORDER: ';
+        font-weight: 400;
+        color: #777;
+    }
+
+    .zara-order-card {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .order-center,
+    .order-right {
+        text-align: left;
+    }
+
+    .zara-link {
+        display: inline-block;
+        margin-top: 8px;
+    }
+}
+
+/* =========================================
+   🌑 DARK MODE OVERRIDES
+   High Contrast & Sharp
+========================================= */
+
+/* Backgrounds & Text */
+html.dark .account-page,
+html.dark .zara-page {
+    color: #ffffff;
+}
+
+html.dark .account-title,
+html.dark .zara-title {
+    color: #ffffff;
+}
+
+html.dark .account-message,
+html.dark .order-date {
+    color: #bbbbbb;
+}
+
+/* Table */
+html.dark .orders-list {
+    border-top-color: #333;
+}
+
+html.dark .orders-header {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+html.dark .orders-row {
+    color: #cccccc;
+    border-bottom-color: #333;
+}
+
+html.dark .order-id {
+    color: #ffffff;
+}
+
+html.dark .order-link {
+    color: #ffffff;
+}
+
+/* Cards */
+html.dark .zara-order-card {
+    background: #000;
+    border-color: #333;
+}
+
+html.dark .zara-order-card:hover {
+    border-color: #ffffff;
+}
+
+html.dark .order-left p,
+html.dark .order-price {
+    color: #ffffff;
+}
+
+html.dark .zara-link {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+/* Statuses in Dark Mode */
+html.dark .order-status.paid {
+    background: #ffffff;
+    color: #000000;
+    /* Invert for pop */
+}
+
+html.dark .order-status.pending,
+html.dark .order-status.not-paid {
+    background: #1a1a1a;
+    color: #E50010;
+    /* Keep Red Pop */
+    border-color: #333;
+}

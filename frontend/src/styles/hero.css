@@ -1,0 +1,168 @@
+/* =========================================
+   HERO SLIDER
+   ZARA / H&M STYLE — PRODUCTION READY
+========================================= */
+
+/* -----------------------------------------
+   HERO SLIDER WRAPPER
+----------------------------------------- */
+.hero-slider {
+    position: relative;
+    width: 100vw;
+    height: 90vh;
+    margin-left: calc(50% - 50vw);
+    overflow: hidden;
+    margin-top: 0;
+    background: #000000;
+    /* Default black prevents flash */
+}
+
+/* -----------------------------------------
+   SLIDE
+----------------------------------------- */
+.hero-slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* -----------------------------------------
+   MEDIA (IMAGE / VIDEO)
+----------------------------------------- */
+.hero-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    will-change: transform;
+    transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    opacity: 0.95;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .hero-slide:hover .hero-media {
+        transform: scale(1.04);
+    }
+}
+
+/* -----------------------------------------
+   OVERLAY
+----------------------------------------- */
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    /* Dark gradient ensures text readability */
+    background: linear-gradient(to right,
+            rgba(0, 0, 0, 0.75) 0%,
+            rgba(0, 0, 0, 0.45) 40%,
+            rgba(0, 0, 0, 0.1) 70%,
+            rgba(0, 0, 0, 0) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 6vw;
+    color: #ffffff;
+}
+
+/* -----------------------------------------
+   TEXT
+----------------------------------------- */
+.hero-overlay h1 {
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin-bottom: 16px;
+    max-width: 600px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    line-height: 0.95;
+    color: #ffffff;
+    /* Enforce Pure White */
+}
+
+.hero-overlay p {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.6;
+    max-width: 480px;
+    margin-bottom: 32px;
+    color: #f4f4f4;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* -----------------------------------------
+   CTA BUTTON (H&M RED)
+----------------------------------------- */
+.hero-btn {
+    display: inline-block;
+    width: fit-content;
+    padding: 16px 36px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background-color: #E50010;
+    /* Sharp Red */
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(229, 0, 16, 0.4);
+}
+
+.hero-btn:hover {
+    background-color: #c4000e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(229, 0, 16, 0.5);
+}
+
+/* -----------------------------------------
+   MOBILE OPTIMIZATION
+----------------------------------------- */
+@media (max-width: 768px) {
+    .hero-slider {
+        width: 100%;
+        margin-left: 0;
+        height: 75vh;
+    }
+
+    .hero-overlay {
+        padding: 0 24px;
+        align-items: center;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.55);
+    }
+
+    .hero-overlay h1 {
+        font-size: 2.4rem;
+    }
+}
+
+/* =========================================
+   🌑 DARK MODE OPTIMIZATION
+   Fixes "Faded Text" Issues
+========================================= */
+html.dark .hero-slider {
+    background: #000000;
+}
+
+html.dark .hero-overlay h1 {
+    color: #ffffff !important;
+    /* Force Bright White */
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.9);
+    /* Stronger Shadow */
+}
+
+html.dark .hero-overlay p {
+    color: #eeeeee !important;
+    /* Force Off-White, not Gray */
+    opacity: 1;
+    /* Remove opacity fades */
+}
+
+/* Keep the Red Button Popping in Dark Mode */
+html.dark .hero-btn {
+    background-color: #E50010;
+    color: #ffffff;
+    box-shadow: 0 0 20px rgba(229, 0, 16, 0.2);
+    /* Glow Effect */
+}
