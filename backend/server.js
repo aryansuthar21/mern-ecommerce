@@ -1,57 +1,85 @@
-const path = require('path');
-const express = require('express');
-const dotenv = require('dotenv');
-dotenv.config();
-console.log("Key Loaded:", process.env.RAZORPAY_KEY_ID ? "YES" : "NO");
-const connectDB = require('./config/db');
-const { notFound, errorHandler } = require('./middleware/errorMiddleware');
+const path = require('path')
+const express = require('express')
+const dotenv = require('dotenv')
+const cors = require('cors')
 
-const productRoutes = require('./routes/productRoutes');
-const userRoutes = require('./routes/userRoutes');
-const uploadRoutes = require('./routes/uploadRoutes');
+dotenv.config()
+
+console.log("Key Loaded:", process.env.RAZORPAY_KEY_ID ? "YES" : "NO")
+
+const connectDB = require('./config/db')
+const { notFound, errorHandler } = require('./middleware/errorMiddleware')
+
+const productRoutes = require('./routes/productRoutes')
+const userRoutes = require('./routes/userRoutes')
+const uploadRoutes = require('./routes/uploadRoutes')
 const orderRoutes = require('./routes/orderRoutes')
 const adminRoutes = require('./routes/adminRoutes')
 const paymentRoutes = require('./routes/paymentRoutes')
 const categoryRoutes = require('./routes/categoryRoutes')
 const wishlistRoutes = require('./routes/wishlistRoutes')
-connectDB();
+const googleAuthRoutes = require('./routes/googleAuthRoutes')
 
-const app = express();
+connectDB()
+
+const app = express()
+
+/* =========================
+   ✅ CORS FIX (IMPORTANT)
+========================= */
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "https://mern-ecommerce-94z9aktha-aryansuthar21s-projects.vercel.app"
+  ],
+  credentials: true
+}))
+
+/* =========================
+   Middlewares
+========================= */
+app.use(express.json())
 
 app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
-  next();
-});
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups")
+  next()
+})
 
-app.use(express.json());
-app.use('/api/products', productRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/upload', uploadRoutes);
+/* =========================
+   Routes
+========================= */
+app.use('/api/products', productRoutes)
+app.use('/api/users', userRoutes)
+app.use('/api/upload', uploadRoutes)
 app.use('/api/orders', orderRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/payment', paymentRoutes)
-app.use('/api/auth/google', require('./routes/googleAuthRoutes'))
+app.use('/api/auth/google', googleAuthRoutes)
 app.use('/api/categories', categoryRoutes)
 app.use('/api/wishlist', wishlistRoutes)
 
+/* =========================
+   Uploads Static
+========================= */
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 
-// uploads
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+/* =========================
+   Root Test Route
+========================= */
+app.get('/', (req, res) => {
+  res.send('API is running....')
+})
 
-
-// production
-
-  app.get('/', (req, res) => {
-    res.send('API is running....');
-  });
-
-
-app.use(notFound);
+/* =========================
+   Error Handlers
+========================= */
+app.use(notFound)
 app.use(errorHandler)
 
-
-const PORT = process.env.PORT || 5000;
-app.listen(
-  PORT,
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
-);
+/* =========================
+   Start Server
+========================= */
+const PORT = process.env.PORT || 5000
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
+})
