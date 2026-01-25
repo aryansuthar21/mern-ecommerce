@@ -1,53 +1,53 @@
-import React, { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../utils/api";
 
 const RegisterScreen = () => {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [message, setMessage] = useState(null)
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const submitHandler = async (e) => {
-    e.preventDefault()
-    setError(null)
-    setMessage(null)
+    e.preventDefault();
+    setError(null);
+    setMessage(null);
 
     if (password !== confirmPassword) {
-      setMessage('Passwords do not match')
-      return
+      setMessage("Passwords do not match");
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     try {
       const config = {
-        headers: { 'Content-Type': 'application/json' },
-      }
+        headers: { "Content-Type": "application/json" },
+      };
 
-      const { data } = await axios.post(
-        '/api/users',
+      const { data } = await api.post(
+        "/api/users",
         { name, email, password },
-        config
-      )
+        config,
+      );
 
-      localStorage.setItem('userInfo', JSON.stringify(data))
-      setLoading(false)
-      navigate('/')
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
+      navigate("/");
     } catch (err) {
       setError(
         err.response && err.response.data.message
           ? err.response.data.message
-          : err.message
-      )
-      setLoading(false)
+          : err.message,
+      );
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <section className="auth-page">
@@ -103,11 +103,7 @@ const RegisterScreen = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="auth-btn"
-            disabled={loading}
-          >
+          <button type="submit" className="auth-btn" disabled={loading}>
             Register
           </button>
         </form>
@@ -117,7 +113,7 @@ const RegisterScreen = () => {
         </p>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default RegisterScreen
+export default RegisterScreen;

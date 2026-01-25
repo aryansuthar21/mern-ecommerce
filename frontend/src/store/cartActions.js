@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from 'api';
 
 // Import constants (or define them here if you prefer a single file)
 import { 
@@ -11,7 +11,7 @@ import {
 // 1. Add Item to Cart Action Creator
 export const addToCart = (id, qty, size, color) => async (dispatch, getState) => {
   // Fetch product details from the API
-  const { data } = await axios.get(`/api/products/${id}`);
+  const { data } = await api.get(`/api/products/${id}`);
 
   dispatch({
     type: CART_ADD_ITEM,

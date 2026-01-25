@@ -1,58 +1,54 @@
-import React, { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import React, { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import api from "../utils/api";
 
 const ResetPasswordScreen = () => {
-  const { token } = useParams()
-  const navigate = useNavigate()
+  const { token } = useParams();
+  const navigate = useNavigate();
 
-  const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const submitHandler = async (e) => {
-    e.preventDefault()
-    setError('')
-    setSuccess('')
+    e.preventDefault();
+    setError("");
+    setSuccess("");
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match')
-      return
+      setError("Passwords do not match");
+      return;
     }
 
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const { data } = await axios.post(
-  `/api/users/resetpassword/${token}`,
-  { password }
-)
+      const { data } = await api.post(`/api/users/resetpassword/${token}`, {
+        password,
+      });
 
-
-      setSuccess(data.message || 'Password reset successful')
+      setSuccess(data.message || "Password reset successful");
 
       setTimeout(() => {
-        navigate('/login')
-      }, 2000)
+        navigate("/login");
+      }, 2000);
     } catch (err) {
       setError(
-        err.response?.data?.message || 'Reset link is invalid or expired'
-      )
+        err.response?.data?.message || "Reset link is invalid or expired",
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <section className="auth-page">
       <div className="auth-box">
         <h1 className="auth-title">Reset Password</h1>
 
-        <p className="auth-subtitle">
-          Create a new password for your account.
-        </p>
+        <p className="auth-subtitle">Create a new password for your account.</p>
 
         {error && <div className="auth-error">{error}</div>}
         {success && <div className="auth-success">{success}</div>}
@@ -80,17 +76,13 @@ const ResetPasswordScreen = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="auth-btn"
-            disabled={loading}
-          >
-            {loading ? 'Resetting...' : 'Reset Password'}
+          <button type="submit" className="auth-btn" disabled={loading}>
+            {loading ? "Resetting..." : "Reset Password"}
           </button>
         </form>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ResetPasswordScreen
+export default ResetPasswordScreen;

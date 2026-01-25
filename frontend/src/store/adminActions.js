@@ -1,33 +1,29 @@
-import axios from 'axios'
+import api from "../utils/api";
 
 export const getAdminDashboard = () => async (dispatch, getState) => {
   try {
-    dispatch({ type: 'ADMIN_DASHBOARD_REQUEST' })
+    dispatch({ type: "ADMIN_DASHBOARD_REQUEST" });
 
     const {
       userLogin: { userInfo },
-    } = getState()
+    } = getState();
 
     const config = {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
       },
-    }
+    };
 
-    const { data } = await axios.get(
-      '/api/orders/admin/summary',
-      config
-    )
+    const { data } = await api.get("/api/orders/admin/summary", config);
 
     dispatch({
-      type: 'ADMIN_DASHBOARD_SUCCESS',
+      type: "ADMIN_DASHBOARD_SUCCESS",
       payload: data,
-    })
+    });
   } catch (error) {
     dispatch({
-      type: 'ADMIN_DASHBOARD_FAIL',
-      payload:
-        error.response?.data.message || error.message,
-    })
+      type: "ADMIN_DASHBOARD_FAIL",
+      payload: error.response?.data.message || error.message,
+    });
   }
-}
+};

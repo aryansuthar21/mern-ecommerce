@@ -1,126 +1,137 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { useSelector } from 'react-redux'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
+import React, { useEffect, useState } from "react";
+import api from "../utils/api";
+import { useSelector } from "react-redux";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
 
 const AdminCategoryScreen = () => {
-  const [name, setName] = useState('')
-  const [parentId, setParentId] = useState('')
-  const [categories, setCategories] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
-  const [success, setSuccess] = useState(false)
+  const [name, setName] = useState("");
+  const [parentId, setParentId] = useState("");
+  const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-  const [isEditing, setIsEditing] = useState(false)
-  const [editId, setEditId] = useState(null)
+  const [isEditing, setIsEditing] = useState(false);
+  const [editId, setEditId] = useState(null);
 
-  const { userInfo } = useSelector((state) => state.userLogin)
+  const { userInfo } = useSelector((state) => state.userLogin);
 
   // 1. Fetch categories
   const fetchCategories = async () => {
     try {
-      setLoading(true)
-      const { data } = await axios.get('/api/categories')
-      setCategories(data)
-      setLoading(false)
+      setLoading(true);
+      const { data } = await api.get("/api/categories");
+      setCategories(data);
+      setLoading(false);
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to fetch categories')
-      setLoading(false)
+      setError(err.response?.data?.message || "Failed to fetch categories");
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    fetchCategories()
-  }, [])
+    fetchCategories();
+  }, []);
 
   // 2. Reset form
   const resetForm = () => {
-    setName('')
-    setParentId('')
-    setIsEditing(false)
-    setEditId(null)
+    setName("");
+    setParentId("");
+    setIsEditing(false);
+    setEditId(null);
     // Don't reset success here or it disappears too fast
-  }
+  };
 
   // 3. Add / Update category
   const submitHandler = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
-      setLoading(true)
-      setError(null)
+      setLoading(true);
+      setError(null);
 
       const config = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${userInfo.token}`,
         },
-      }
+      };
 
       if (isEditing) {
-        await axios.put(
+        await api.put(
           `/api/categories/${editId}`,
           { name, parent: parentId || null },
-          config
-        )
+          config,
+        );
       } else {
-        await axios.post(
-          '/api/categories',
+        await api.post(
+          "/api/categories",
           { name, parent: parentId || null },
-          config
-        )
+          config,
+        );
       }
 
-      setSuccess(true)
-      resetForm()
-      fetchCategories()
-      
+      setSuccess(true);
+      resetForm();
+      fetchCategories();
+
       // Auto-hide success message after 3 seconds
-      setTimeout(() => setSuccess(false), 3000)
+      setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
-      setError(err.response?.data?.message || 'Action failed')
-      setLoading(false)
+      setError(err.response?.data?.message || "Action failed");
+      setLoading(false);
     }
-  }
+  };
 
   // 4. Delete category
   const deleteHandler = async (id) => {
-    if (window.confirm('Are you sure? Deleting a parent category will make its children "Root" categories.')) {
+    if (
+      window.confirm(
+        'Are you sure? Deleting a parent category will make its children "Root" categories.',
+      )
+    ) {
       try {
-        setLoading(true)
+        setLoading(true);
         const config = {
           headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-        await axios.delete(`/api/categories/${id}`, config)
-        fetchCategories()
-        setLoading(false)
+        };
+        await api.delete(`/api/categories/${id}`, config);
+        fetchCategories();
+        setLoading(false);
       } catch (err) {
-        setError(err.response?.data?.message || 'Delete failed')
-        setLoading(false)
+        setError(err.response?.data?.message || "Delete failed");
+        setLoading(false);
       }
     }
-  }
+  };
 
   // 5. Edit mode toggle
   const editHandler = (category) => {
-    setIsEditing(true)
-    setEditId(category._id)
-    setName(category.name)
+    setIsEditing(true);
+    setEditId(category._id);
+    setName(category.name);
     // Extract ID whether it's populated or just a string
-    setParentId(category.parent?._id || category.parent || '')
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+    setParentId(category.parent?._id || category.parent || "");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
     <section className="admin-page">
-      <h1 className="admin-title">{isEditing ? 'Edit Category' : 'Manage Categories'}</h1>
+      <h1 className="admin-title">
+        {isEditing ? "Edit Category" : "Manage Categories"}
+      </h1>
 
       {loading && <Loader />}
       {error && <Message variant="danger">{error}</Message>}
-      {success && <Message variant="success">Category successfully saved!</Message>}
+      {success && (
+        <Message variant="success">Category successfully saved!</Message>
+      )}
 
-      <form onSubmit={submitHandler} className="admin-form shadow-sm p-4 mb-5 bg-white rounded">
+      <form
+        onSubmit={submitHandler}
+        className="admin-form shadow-sm p-4 mb-5 bg-white rounded"
+      >
         <div className="form-group mb-3">
           <label className="form-label">Category Name</label>
           <input
@@ -133,10 +144,12 @@ const AdminCategoryScreen = () => {
         </div>
 
         <div className="form-group mb-4">
-          <label className="form-label">Parent Department (Select "None" to create a main link)</label>
-          <select 
-            className="form-select" 
-            value={parentId} 
+          <label className="form-label">
+            Parent Department (Select "None" to create a main link)
+          </label>
+          <select
+            className="form-select"
+            value={parentId}
             onChange={(e) => setParentId(e.target.value)}
           >
             <option value="">None (Main Category)</option>
@@ -151,8 +164,12 @@ const AdminCategoryScreen = () => {
         </div>
 
         <div className="admin-actions d-flex gap-2">
-          <button type="submit" className="admin-btn btn btn-dark" disabled={loading}>
-            {isEditing ? 'Update Category' : 'Create Category'}
+          <button
+            type="submit"
+            className="admin-btn btn btn-dark"
+            disabled={loading}
+          >
+            {isEditing ? "Update Category" : "Create Category"}
           </button>
 
           {isEditing && (
@@ -188,7 +205,7 @@ const AdminCategoryScreen = () => {
                 <td>
                   {cat.parent ? (
                     <span className="badge bg-info text-dark">
-                      {cat.parent.name || 'Sub-category'}
+                      {cat.parent.name || "Sub-category"}
                     </span>
                   ) : (
                     <span className="badge bg-secondary">Main Dept</span>
@@ -215,7 +232,7 @@ const AdminCategoryScreen = () => {
         </table>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default AdminCategoryScreen
+export default AdminCategoryScreen;

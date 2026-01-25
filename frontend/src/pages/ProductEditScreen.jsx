@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   Form,
   Button,
@@ -9,44 +9,47 @@ import {
   Card,
   Table,
   InputGroup,
-} from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
-import { listProductDetails, updateProduct } from '../store/productActions'
-import { PRODUCT_UPDATE_RESET } from '../store/productReducers'
-import axios from 'axios'
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
+import { listProductDetails, updateProduct } from "../store/productActions";
+import { PRODUCT_UPDATE_RESET } from "../store/productReducers";
+import api from "../utils/api";
 
 const ProductEditScreen = () => {
-  const { id: productId } = useParams()
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const { id: productId } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // ================= STATE =================
-  const [name, setName] = useState('')
-  const [price, setPrice] = useState(0)
-  const [image, setImage] = useState('')
-  const [brand, setBrand] = useState('')
-  const [description, setDescription] = useState('')
-  const [countInStock, setCountInStock] = useState(0)
-  const [uploading, setUploading] = useState(false)
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState(0);
+  const [image, setImage] = useState("");
+  const [brand, setBrand] = useState("");
+  const [description, setDescription] = useState("");
+  const [countInStock, setCountInStock] = useState(0);
+  const [uploading, setUploading] = useState(false);
 
-  const [categories, setCategories] = useState([])
-  const [selectedParent, setSelectedParent] = useState('')
-  const [category, setCategory] = useState('')
+  const [categories, setCategories] = useState([]);
+  const [selectedParent, setSelectedParent] = useState("");
+  const [category, setCategory] = useState("");
 
-  const [variants, setVariants] = useState([])
+  const [variants, setVariants] = useState([]);
 
   // ================= REDUX =================
-  const productDetails = useSelector((state) => state.productDetails)
-  const { loading, error, product } = productDetails
+  const productDetails = useSelector((state) => state.productDetails);
+  const { loading, error, product } = productDetails;
 
-  const productUpdate = useSelector((state) => state.productUpdate)
-  const { loading: loadingUpdate, error: errorUpdate, success: successUpdate } =
-    productUpdate
+  const productUpdate = useSelector((state) => state.productUpdate);
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = productUpdate;
 
-  const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
   // ================= FETCH CATEGORIES =================
   useEffect(() => {
@@ -56,120 +59,113 @@ const ProductEditScreen = () => {
           headers: {
             Authorization: `Bearer ${userInfo?.token}`,
           },
-        }
+        };
 
-        const { data } = await axios.get('/api/categories', config)
-        setCategories(data)
+        const { data } = await api.get("/api/categories", config);
+        setCategories(data);
       } catch (err) {
-        console.error('Failed to fetch categories:', err)
+        console.error("Failed to fetch categories:", err);
       }
-    }
+    };
 
     if (userInfo && userInfo.isAdmin) {
-      fetchCategories()
+      fetchCategories();
     }
-  }, [userInfo])
+  }, [userInfo]);
 
   // ================= LOAD PRODUCT =================
   useEffect(() => {
     if (successUpdate) {
-      dispatch({ type: PRODUCT_UPDATE_RESET })
-      navigate('/admin/productlist')
+      dispatch({ type: PRODUCT_UPDATE_RESET });
+      navigate("/admin/productlist");
     } else {
       if (!product || product._id !== productId) {
-        dispatch(listProductDetails(productId))
+        dispatch(listProductDetails(productId));
       } else {
-        setName(product.name)
-        setPrice(product.price)
-        setImage(product.image)
-        setBrand(product.brand)
-        setDescription(product.description)
+        setName(product.name);
+        setPrice(product.price);
+        setImage(product.image);
+        setBrand(product.brand);
+        setDescription(product.description);
 
-        setVariants(product.variants || [])
+        setVariants(product.variants || []);
 
         const total =
           product.variants?.reduce(
             (acc, item) => acc + Number(item.countInStock || 0),
-            0
-          ) || product.countInStock
+            0,
+          ) || product.countInStock;
 
-        setCountInStock(total)
+        setCountInStock(total);
 
         // ✅ category can be populated object or id
         const catId =
-          typeof product.category === 'object'
+          typeof product.category === "object"
             ? product.category?._id
-            : product.category
+            : product.category;
 
-        setCategory(catId || '')
+        setCategory(catId || "");
 
         // find parent
         if (categories.length && catId) {
-          const full = categories.find((c) => c._id === catId)
+          const full = categories.find((c) => c._id === catId);
 
           if (full?.parent) {
             setSelectedParent(
-              typeof full.parent === 'object' ? full.parent._id : full.parent
-            )
+              typeof full.parent === "object" ? full.parent._id : full.parent,
+            );
           }
         }
       }
     }
-  }, [
-    dispatch,
-    product,
-    productId,
-    successUpdate,
-    navigate,
-    categories,
-  ])
+  }, [dispatch, product, productId, successUpdate, navigate, categories]);
 
   // ================= VARIANTS =================
   const addVariantHandler = () => {
-    setVariants([...variants, { size: '', color: '', countInStock: 0 }])
-  }
+    setVariants([...variants, { size: "", color: "", countInStock: 0 }]);
+  };
 
   const removeVariantHandler = (index) => {
-    setVariants(variants.filter((_, i) => i !== index))
-  }
+    setVariants(variants.filter((_, i) => i !== index));
+  };
 
   const handleVariantChange = (index, field, value) => {
-    const newVariants = [...variants]
-    newVariants[index][field] = value
-    setVariants(newVariants)
+    const newVariants = [...variants];
+    newVariants[index][field] = value;
+    setVariants(newVariants);
 
-    if (field === 'countInStock') {
+    if (field === "countInStock") {
       const total = newVariants.reduce(
         (acc, item) => acc + Number(item.countInStock || 0),
-        0
-      )
-      setCountInStock(total)
+        0,
+      );
+      setCountInStock(total);
     }
-  }
+  };
 
   // ================= IMAGE UPLOAD =================
   const uploadFileHandler = async (e) => {
-    const file = e.target.files[0]
-    const formData = new FormData()
-    formData.append('image', file)
-    setUploading(true)
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("image", file);
+    setUploading(true);
 
     try {
       const config = {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      }
-      const { data } = await axios.post('/api/upload', formData, config)
-      setImage(data)
-      setUploading(false)
+        headers: { "Content-Type": "multipart/form-data" },
+      };
+      const { data } = await api.post("/api/upload", formData, config);
+      setImage(data);
+      setUploading(false);
     } catch (error) {
-      console.error(error)
-      setUploading(false)
+      console.error(error);
+      setUploading(false);
     }
-  }
+  };
 
   // ================= SUBMIT =================
   const submitHandler = (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     dispatch(
       updateProduct({
@@ -181,9 +177,9 @@ const ProductEditScreen = () => {
         category,
         description,
         variants,
-      })
-    )
-  }
+      }),
+    );
+  };
 
   // ================= UI =================
   return (
@@ -260,7 +256,7 @@ const ProductEditScreen = () => {
                             <Form.Control
                               value={v.size}
                               onChange={(e) =>
-                                handleVariantChange(i, 'size', e.target.value)
+                                handleVariantChange(i, "size", e.target.value)
                               }
                             />
                           </td>
@@ -268,7 +264,7 @@ const ProductEditScreen = () => {
                             <Form.Control
                               value={v.color}
                               onChange={(e) =>
-                                handleVariantChange(i, 'color', e.target.value)
+                                handleVariantChange(i, "color", e.target.value)
                               }
                             />
                           </td>
@@ -279,8 +275,8 @@ const ProductEditScreen = () => {
                               onChange={(e) =>
                                 handleVariantChange(
                                   i,
-                                  'countInStock',
-                                  e.target.value
+                                  "countInStock",
+                                  e.target.value,
                                 )
                               }
                             />
@@ -358,8 +354,8 @@ const ProductEditScreen = () => {
                     <Form.Select
                       value={selectedParent}
                       onChange={(e) => {
-                        setSelectedParent(e.target.value)
-                        setCategory('')
+                        setSelectedParent(e.target.value);
+                        setCategory("");
                       }}
                     >
                       <option value="">Select</option>
@@ -385,7 +381,7 @@ const ProductEditScreen = () => {
                         .filter(
                           (c) =>
                             c.parent === selectedParent ||
-                            c.parent?._id === selectedParent
+                            c.parent?._id === selectedParent,
                         )
                         .map((c) => (
                           <option key={c._id} value={c._id}>
@@ -416,7 +412,7 @@ const ProductEditScreen = () => {
         </Form>
       )}
     </Container>
-  )
-}
+  );
+};
 
-export default ProductEditScreen
+export default ProductEditScreen;

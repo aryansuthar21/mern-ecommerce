@@ -1,32 +1,30 @@
-import React, { useState } from 'react'
-import axios from 'axios'
+import React, { useState } from "react";
+import api from "../utils/api";
 
 const ForgotPasswordScreen = () => {
-  const [email, setEmail] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [message, setMessage] = useState('')
-  const [error, setError] = useState('')
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
   const submitHandler = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setMessage('')
-    setError('')
+    e.preventDefault();
+    setLoading(true);
+    setMessage("");
+    setError("");
 
     try {
-      const { data } = await axios.post('/api/users/forgotpassword', {
+      const { data } = await api.post("/api/users/forgotpassword", {
         email,
-      })
+      });
 
-      setMessage(data.message || 'Reset link sent to your email')
+      setMessage(data.message || "Reset link sent to your email");
     } catch (err) {
-      setError(
-        err.response?.data?.message || 'Something went wrong'
-      )
+      setError(err.response?.data?.message || "Something went wrong");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <section className="auth-page">
@@ -52,17 +50,13 @@ const ForgotPasswordScreen = () => {
             />
           </div>
 
-          <button
-            type="submit"
-            className="auth-btn"
-            disabled={loading}
-          >
-            {loading ? 'Sending...' : 'Send Reset Link'}
+          <button type="submit" className="auth-btn" disabled={loading}>
+            {loading ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ForgotPasswordScreen
+export default ForgotPasswordScreen;

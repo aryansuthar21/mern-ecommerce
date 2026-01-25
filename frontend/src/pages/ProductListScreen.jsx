@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios' // 👈 Import Axios
+import api from 'api' // 👈 Import api
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
@@ -90,7 +90,7 @@ const ProductListScreen = () => {
         },
       }
 
-      const { data } = await axios.post('/api/products/import', formData, config)
+      const { data } = await api.post('/api/products/import', formData, config)
 
       setImportMessage({ variant: 'success', text: data.message })
       setImportLoading(false)
