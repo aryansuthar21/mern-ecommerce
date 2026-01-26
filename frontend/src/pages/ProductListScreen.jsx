@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import api from 'api' // 👈 Import api
+import api from '../utils/api'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import {
