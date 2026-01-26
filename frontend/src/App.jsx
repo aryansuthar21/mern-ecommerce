@@ -8,7 +8,7 @@ import {
   useLocation,
 } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import api from "../utils/api";
+import api from "../src/utils/api";
 import { motion, AnimatePresence } from "framer-motion";
 
 import "bootstrap/dist/css/bootstrap.min.css";
