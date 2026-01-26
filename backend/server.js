@@ -25,15 +25,21 @@ connectDB()
 const app = express()
 
 /* =========================
-   ✅ CORS FIX (IMPORTANT)
+   ✅ CORS CONFIG (FINAL FIX)
 ========================= */
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://mern-ecommerce-94z9aktha-aryansuthar21s-projects.vercel.app"
+    "https://mern-ecommerce-94z9aktha-aryansuthar21s-projects.vercel.app",
+    "https://mern-ecommerce-2jh98tfa4-aryansuthar21s-projects.vercel.app"
   ],
-  credentials: true
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }))
+
+// ✅ Preflight requests fix
+app.options('*', cors())
 
 /* =========================
    Middlewares
