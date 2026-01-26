@@ -1,4 +1,4 @@
-import api from 'api';
+import api from "../utils/api";
 
 // Import constants (or define them here if you prefer a single file)
 import { 
