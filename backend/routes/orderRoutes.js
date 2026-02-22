@@ -3,6 +3,7 @@ const asyncHandler = require('express-async-handler')
 const Order = require('../models/orderModel')
 const Product = require('../models/productModel')
 const { protect, admin } = require('../middleware/authMiddleware')
+const { createShiprocketOrder } = require('../utils/shiprocket')
 // ✅ Import Notification Helpers
 const { generateInvoicePDF, sendInvoiceEmail, sendOrderSMS } = require('../utils/invoiceHelper')
 
@@ -42,6 +43,26 @@ router.post(
     })
 
     const createdOrder = await order.save()
+
+    // 🚀 Create Shiprocket Order (Test Mode)
+try {
+  const shiprocketResponse = await createShiprocketOrder(
+    createdOrder,
+    req.user
+  )
+
+  createdOrder.shiprocketOrderId =
+    shiprocketResponse.order_id || null
+
+  createdOrder.shiprocketShipmentId =
+    shiprocketResponse.shipment_id || null
+
+  await createdOrder.save()
+
+  console.log('🚀 Shiprocket Order Created')
+} catch (error) {
+  console.error('❌ Shiprocket Error:', error.message)
+}
 
     // ✅ UPDATED STOCK REDUCTION LOGIC (Support Variants)
     for (const item of orderItems) {

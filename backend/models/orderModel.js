@@ -60,6 +60,14 @@ const orderSchema = mongoose.Schema(
       default: 0.0,
     },
 
+    shiprocketOrderId: {
+    type: String,
+    },
+
+    shiprocketShipmentId: {
+    type: String,
+    },
+
     totalPrice: {
       type: Number,
       required: true,
