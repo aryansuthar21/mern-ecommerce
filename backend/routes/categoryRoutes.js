@@ -200,7 +200,11 @@ router.get(
 
     categories.forEach((cat) => {
       if (cat.parent) {
-        const parentId = cat.parent.toString();
+        // Handle both ObjectId and populated object
+        const parentId =
+          typeof cat.parent === "object"
+            ? cat.parent._id.toString()
+            : cat.parent.toString();
 
         if (map[parentId]) {
           map[parentId].children.push(
