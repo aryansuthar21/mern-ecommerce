@@ -189,35 +189,48 @@ router.get(
     const categories = await Category.find({}).lean();
 
     const map = {};
+    const tree = [];
+
+    // First create map
     categories.forEach((cat) => {
       map[cat._id.toString()] = {
-        ...cat,
+        _id: cat._id,
+        name: cat.name,
+        slug: cat.slug,
+        parent: cat.parent,
+        bannerImage: cat.bannerImage,
         children: [],
       };
     });
 
-    const tree = [];
-
+    // Then build tree
     categories.forEach((cat) => {
-      if (cat.parent) {
-        // Handle both ObjectId and populated object
-        const parentId =
-          typeof cat.parent === "object"
-            ? cat.parent._id.toString()
-            : cat.parent.toString();
-
+      if (cat.parent === null) {
+        tree.push(map[cat._id.toString()]);
+      } else {
+        const parentId = cat.parent?.toString();
         if (map[parentId]) {
           map[parentId].children.push(
             map[cat._id.toString()]
           );
         }
-      } else {
-        tree.push(map[cat._id.toString()]);
       }
     });
 
     res.json(tree);
   })
 );
+router.get('/fix-parents', asyncHandler(async (req, res) => {
+  const categories = await Category.find({})
+
+  for (let cat of categories) {
+    if (cat.parent && typeof cat.parent === 'object') {
+      cat.parent = cat.parent._id
+      await cat.save()
+    }
+  }
+
+  res.json({ message: "Parent fields fixed" })
+}))
 
 module.exports = router;
