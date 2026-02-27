@@ -1,113 +1,211 @@
-const express = require('express')
-const asyncHandler = require('express-async-handler')
-const Category = require('../models/categoryModel')
-const { protect, admin } = require('../middleware/authMiddleware')
-const slugify = require('slugify')
+const express = require("express");
+const asyncHandler = require("express-async-handler");
+const mongoose = require("mongoose");
+const slugify = require("slugify");
 
-const router = express.Router()
+const Category = require("../models/categoryModel");
+const Product = require("../models/productModel");
+const { protect, admin } = require("../middleware/authMiddleware");
 
-// ============================================================
-// ✅ CREATE CATEGORY (ADMIN)
-// ============================================================
+const router = express.Router();
+
+/* ===========================================================
+   CREATE CATEGORY
+=========================================================== */
 router.post(
-  '/',
+  "/",
   protect,
   admin,
   asyncHandler(async (req, res) => {
-    const { name, parent } = req.body
+    const { name, parent, description, sortOrder } = req.body;
 
-    if (!name) {
-      res.status(400)
-      throw new Error('Category name is required')
+    if (!name || name.trim().length < 2) {
+      res.status(400);
+      throw new Error("Category name must be at least 2 characters");
     }
 
-    const slug = slugify(name, { lower: true, strict: true })
+    const slug = slugify(name, { lower: true, strict: true });
 
-    // ❗ Prevent duplicate category
-    const exists = await Category.findOne({ slug })
-    if (exists) {
-      res.status(400)
-      throw new Error('Category already exists')
+    const existing = await Category.findOne({
+      slug,
+      parent: parent || null,
+    });
+
+    if (existing) {
+      res.status(400);
+      throw new Error("Category already exists in this section");
+    }
+
+    let level = 0;
+
+    if (parent) {
+      const parentCategory = await Category.findById(parent);
+      if (!parentCategory) {
+        res.status(400);
+        throw new Error("Invalid parent category");
+      }
+      level = parentCategory.level + 1;
     }
 
     const category = await Category.create({
       name,
       slug,
       parent: parent || null,
-    })
+      description,
+      sortOrder: sortOrder || 0,
+      level,
+    });
 
-    res.status(201).json(category)
+    res.status(201).json(category);
   })
-)
+);
 
-// ============================================================
-// ✅ GET ALL CATEGORIES (PUBLIC / ADMIN)
-// ============================================================
+/* ===========================================================
+   GET TREE STRUCTURE (Public)
+=========================================================== */
 router.get(
-  '/',
+  "/tree",
   asyncHandler(async (req, res) => {
-    const categories = await Category.find({})
-      .populate('parent', 'name slug')
-      .sort({ createdAt: 1 })
+    const categories = await Category.find({ isActive: true })
+      .sort({ sortOrder: 1, createdAt: 1 })
+      .lean();
 
-    res.json(categories)
-  })
-)
+    const map = {};
+    const roots = [];
 
-// ============================================================
-// ✅ UPDATE CATEGORY (ADMIN)
-// ============================================================
-router.put(
-  '/:id',
-  protect,
-  admin,
-  asyncHandler(async (req, res) => {
-    const { name, parent } = req.body
+    categories.forEach((cat) => {
+      cat.children = [];
+      map[cat._id] = cat;
+    });
 
-    const category = await Category.findById(req.params.id)
-
-    if (category) {
-      if (name) {
-        category.name = name
-        category.slug = slugify(name, { lower: true, strict: true })
+    categories.forEach((cat) => {
+      if (cat.parent) {
+        map[cat.parent]?.children.push(cat);
+      } else {
+        roots.push(cat);
       }
+    });
 
-      category.parent = parent || null
-
-      const updated = await category.save()
-      res.json(updated)
-    } else {
-      res.status(404)
-      throw new Error('Category not found')
-    }
+    res.json(roots);
   })
-)
+);
 
-// ============================================================
-// ✅ DELETE CATEGORY (ADMIN)
-// ============================================================
-router.delete(
-  '/:id',
+/* ===========================================================
+   UPDATE CATEGORY (SAFE SLUG)
+=========================================================== */
+router.put(
+  "/:id",
   protect,
   admin,
   asyncHandler(async (req, res) => {
-    const category = await Category.findById(req.params.id)
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      res.status(400);
+      throw new Error("Invalid category ID");
+    }
+
+    const category = await Category.findById(req.params.id);
 
     if (!category) {
-      res.status(404)
-      throw new Error('Category not found')
+      res.status(404);
+      throw new Error("Category not found");
     }
 
-    // ❗ Prevent deleting if child categories exist
-    const children = await Category.find({ parent: category._id })
-    if (children.length > 0) {
-      res.status(400)
-      throw new Error('Delete sub-categories first')
+    const { name, description, sortOrder, isActive } = req.body;
+
+    if (name && name !== category.name) {
+      const newSlug = slugify(name, { lower: true, strict: true });
+
+      const exists = await Category.findOne({
+        slug: newSlug,
+        parent: category.parent,
+        _id: { $ne: category._id },
+      });
+
+      if (exists) {
+        res.status(400);
+        throw new Error("Another category with same name exists");
+      }
+
+      category.name = name;
+      category.slug = newSlug;
     }
 
-    await category.deleteOne()
-    res.json({ message: 'Category removed' })
+    category.description = description ?? category.description;
+    category.sortOrder = sortOrder ?? category.sortOrder;
+    category.isActive = isActive ?? category.isActive;
+
+    const updated = await category.save();
+    res.json(updated);
   })
-)
+);
 
-module.exports = router
+/* ===========================================================
+   SOFT DELETE CATEGORY
+=========================================================== */
+router.delete(
+  "/:id",
+  protect,
+  admin,
+  asyncHandler(async (req, res) => {
+    const category = await Category.findById(req.params.id);
+
+    if (!category) {
+      res.status(404);
+      throw new Error("Category not found");
+    }
+
+    const childExists = await Category.findOne({
+      parent: category._id,
+    });
+
+    if (childExists) {
+      res.status(400);
+      throw new Error("Remove subcategories first");
+    }
+
+    const productExists = await Product.findOne({
+      category: category._id,
+    });
+
+    if (productExists) {
+      res.status(400);
+      throw new Error("Remove products under this category first");
+    }
+
+    category.isActive = false;
+    await category.save();
+
+    res.json({ message: "Category disabled successfully" });
+  })
+);
+
+// ============================================================
+// ✅ GET CATEGORY TREE (PUBLIC)
+// @route   GET /api/categories/tree
+// ============================================================
+router.get(
+  "/tree",
+  asyncHandler(async (req, res) => {
+    const categories = await Category.find({}).lean();
+
+    // Build map
+    const map = {};
+    categories.forEach((cat) => {
+      map[cat._id] = { ...cat, children: [] };
+    });
+
+    const tree = [];
+
+    categories.forEach((cat) => {
+      if (cat.parent) {
+        map[cat.parent]?.children.push(map[cat._id]);
+      } else {
+        tree.push(map[cat._id]);
+      }
+    });
+
+    res.json(tree);
+  })
+);
+
+module.exports = router;

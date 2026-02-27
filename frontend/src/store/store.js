@@ -9,6 +9,7 @@ import {orderListReducer,  orderDeliverReducer,} from './orderReducers'
 import { adminStatsReducer } from './adminReducers'
 import { orderListMyReducer } from './orderReducers'
 import { wishlistReducer } from './wishlistReducers'
+import { categoryTreeReducer } from './categoryReducers'
 
 
 const initialState = {
@@ -46,6 +47,7 @@ const reducer = combineReducers({
   adminStats: adminStatsReducer,
   orderListMy: orderListMyReducer,
   wishlist: wishlistReducer,
+  categoryTree: categoryTreeReducer,
 });
 
 const middleware = [thunk];

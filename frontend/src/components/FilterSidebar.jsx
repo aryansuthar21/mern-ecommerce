@@ -1,41 +1,26 @@
-import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import api from "../utils/api";
+import { useSelector } from "react-redux";
 import "../styles/filter.css";
 
 const FilterSidebar = ({ filters, setFilters, isOpen, onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // ================= CATEGORY STATE =================
-  const [categories, setCategories] = useState([]);
+  const { tree } = useSelector((state) => state.categoryTree);
 
-  // ================= PRICE LOCAL STATE =================
+  /* ================= PRICE LOCAL STATE ================= */
   const [localPrice, setLocalPrice] = useState({
     min: filters.minPrice,
     max: filters.maxPrice,
   });
 
-  // ================= FETCH CATEGORIES =================
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const { data } = await api.get("/api/categories");
-        setCategories(data);
-      } catch (err) {
-        console.error("Category fetch failed", err);
-      }
-    };
-
-    fetchCategories();
-  }, []);
-
-  // ================= URL PARAM =================
+  /* ================= URL PARAM ================= */
   const query = new URLSearchParams(location.search);
   const activeCategory = query.get("category");
 
-  // ================= HANDLERS =================
+  /* ================= HANDLERS ================= */
+
   const handlePriceApply = () => {
     setFilters({
       ...filters,
@@ -49,7 +34,7 @@ const FilterSidebar = ({ filters, setFilters, isOpen, onClose }) => {
   };
 
   const handleCategoryClick = (slug) => {
-    navigate(`/category?category=${slug}`);
+    navigate(`/products?category=${slug}`);
     onClose();
   };
 
@@ -57,23 +42,8 @@ const FilterSidebar = ({ filters, setFilters, isOpen, onClose }) => {
     const reset = { sort: "newest", minPrice: "", maxPrice: "" };
     setLocalPrice({ min: "", max: "" });
     setFilters(reset);
-    navigate("/category");
+    navigate("/products");
   };
-
-  // ================= GROUP BY DEPARTMENT =================
-  const departments = categories.filter((c) => !c.parent || c.parent === null);
-
-  const subCategories = categories.filter(
-    (c) => c.parent && (c.parent._id || typeof c.parent === "string"),
-  );
-
-  const getSubCats = (parentId) =>
-    subCategories.filter(
-      (c) =>
-        c.parent === parentId ||
-        c.parent?._id === parentId ||
-        c.parent?.toString() === parentId.toString(),
-    );
 
   return (
     <>
@@ -94,24 +64,25 @@ const FilterSidebar = ({ filters, setFilters, isOpen, onClose }) => {
         <div className="filter-group">
           <span className="filter-title">Categories</span>
 
-          {departments.length === 0 ? (
-            <p className="no-items">No items found</p>
+          {!tree || tree.length === 0 ? (
+            <p className="no-items">No categories available</p>
           ) : (
-            departments.map((dept) => (
-              <div key={dept._id} className="category-block">
-                <p className="category-parent">{dept.name}</p>
+            tree.map((section) => (
+              <div key={section._id} className="category-block">
+                <p className="category-parent">{section.name}</p>
 
-                {getSubCats(dept._id).map((sub) => (
-                  <button
-                    key={sub._id}
-                    className={`category-link ${
-                      activeCategory === sub.slug ? "active" : ""
-                    }`}
-                    onClick={() => handleCategoryClick(sub.slug)}
-                  >
-                    {sub.name}
-                  </button>
-                ))}
+                {section.children &&
+                  section.children.map((sub) => (
+                    <button
+                      key={sub._id}
+                      className={`category-link ${
+                        activeCategory === sub.slug ? "active" : ""
+                      }`}
+                      onClick={() => handleCategoryClick(sub.slug)}
+                    >
+                      {sub.name}
+                    </button>
+                  ))}
               </div>
             ))
           )}

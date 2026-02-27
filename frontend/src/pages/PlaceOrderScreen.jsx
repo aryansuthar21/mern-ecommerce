@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import api from "../utils/api";
 
 import { createOrder } from "../store/orderActions";
@@ -17,6 +17,9 @@ const PlaceOrderScreen = () => {
   const { userInfo } = userLogin;
 
   const { success, order, error } = orderCreate;
+
+  // ✅ NEW STATE FOR TERMS
+  const [agreeTerms, setAgreeTerms] = useState(false);
 
   /* ================= PRICE CALCULATION ================= */
   const itemsPrice = Number(
@@ -42,6 +45,11 @@ const PlaceOrderScreen = () => {
 
   /* ================= COD ================= */
   const placeOrderHandler = () => {
+    if (!agreeTerms) {
+      alert("Please agree to Terms & Conditions before placing the order.");
+      return;
+    }
+
     dispatch(
       createOrder({
         orderItems: cart.cartItems,
@@ -57,6 +65,11 @@ const PlaceOrderScreen = () => {
 
   /* ================= RAZORPAY ================= */
   const handleRazorpayPayment = async () => {
+    if (!agreeTerms) {
+      alert("Please agree to Terms & Conditions before proceeding.");
+      return;
+    }
+
     const loaded = await loadRazorpay();
     if (!loaded) return alert("Razorpay SDK failed");
 
@@ -75,7 +88,7 @@ const PlaceOrderScreen = () => {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
       amount: razorOrder.amount,
       currency: razorOrder.currency,
-      name: "PROSHOP",
+      name: "SEHEAN",
       description: "Order Payment",
       order_id: razorOrder.id,
 
@@ -166,12 +179,39 @@ const PlaceOrderScreen = () => {
             <span>₹{totalPrice}</span>
           </div>
 
+          {/* ✅ TERMS CHECKBOX */}
+          <div className="terms-wrapper">
+  <label className="terms-label">
+    <input
+      type="checkbox"
+      checked={agreeTerms}
+      onChange={(e) => setAgreeTerms(e.target.checked)}
+    />
+    <span className="custom-checkbox"></span>
+    <span>
+      I agree to the{" "}
+      <Link to="/terms" target="_blank">
+        Terms & Conditions
+      </Link>{" "}
+      and{" "}
+      <Link to="/privacy" target="_blank">
+        Privacy Policy
+      </Link>.
+    </span>
+  </label>
+</div>
+
           {error && <p className="page-error">{error}</p>}
 
           {cart.paymentMethod === "COD" ? (
             <button
               className="btn-primary checkout-btn"
               onClick={placeOrderHandler}
+              disabled={!agreeTerms}
+              style={{
+                opacity: agreeTerms ? 1 : 0.6,
+                cursor: agreeTerms ? "pointer" : "not-allowed",
+              }}
             >
               Place Order
             </button>
@@ -179,6 +219,11 @@ const PlaceOrderScreen = () => {
             <button
               className="btn-primary checkout-btn"
               onClick={handleRazorpayPayment}
+              disabled={!agreeTerms}
+              style={{
+                opacity: agreeTerms ? 1 : 0.6,
+                cursor: agreeTerms ? "pointer" : "not-allowed",
+              }}
             >
               Pay ₹{totalPrice}
             </button>

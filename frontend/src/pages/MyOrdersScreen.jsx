@@ -61,6 +61,18 @@ const MyOrdersScreen = () => {
               >
                 View details →
               </Link>
+
+              {/* 🚚 Track Order Link */}
+              {order.shiprocketShipmentId && (
+                <a
+  href={`https://shiprocket.co/tracking/${order.shiprocketShipmentId}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="zara-track-link"
+>
+  🚚 Track →
+</a>
+              )}
             </div>
           </div>
         ))}

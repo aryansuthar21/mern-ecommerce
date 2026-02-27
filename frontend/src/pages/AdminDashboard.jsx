@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
-// Charts
 import {
   AreaChart,
   Area,
@@ -18,7 +18,6 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 
-// Action
 import { getAdminStats } from '../store/adminStatsActions'
 
 const AdminDashboard = () => {
@@ -39,12 +38,31 @@ const AdminDashboard = () => {
     monthlySales = [],
   } = adminStatsState
 
+  // ================= REVIEW COUNTER =================
+  const [pendingReviewCount, setPendingReviewCount] = useState(0)
+
+  const fetchPendingReviewCount = async () => {
+    try {
+      const { data } = await axios.get('/api/reviews', {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      })
+
+      const pending = data.filter((r) => !r.isApproved)
+      setPendingReviewCount(pending.length)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   // ================= EFFECT =================
   useEffect(() => {
     if (!userInfo || !userInfo.isAdmin) {
       navigate('/login')
     } else {
       dispatch(getAdminStats())
+      fetchPendingReviewCount()
     }
   }, [dispatch, navigate, userInfo])
 
@@ -59,6 +77,7 @@ const AdminDashboard = () => {
         <>
           {/* ================= STATS ================= */}
           <div className="admin-stats-grid">
+
             <div className="stat-card">
               <span>Total Sales</span>
               <h3>₹{totalSales.toFixed(2)}</h3>
@@ -73,6 +92,23 @@ const AdminDashboard = () => {
               <span>Total Users</span>
               <h3>{totalUsers}</h3>
             </div>
+
+            {/* 🔥 NEW REVIEW COUNTER CARD */}
+            <div
+              className="stat-card"
+              style={{ cursor: 'pointer' }}
+              onClick={() => navigate('/admin/reviews')}
+            >
+              <span>Pending Reviews</span>
+              <h3>{pendingReviewCount}</h3>
+
+              {pendingReviewCount > 0 && (
+                <small style={{ color: 'orange' }}>
+                  Needs Approval
+                </small>
+              )}
+            </div>
+
           </div>
 
           {/* ================= ANALYTICS ================= */}

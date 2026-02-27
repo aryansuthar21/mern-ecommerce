@@ -5,118 +5,130 @@ import {
   PRODUCT_DELETE_REQUEST, PRODUCT_DELETE_SUCCESS, PRODUCT_DELETE_FAIL,
   PRODUCT_CREATE_REQUEST, PRODUCT_CREATE_SUCCESS, PRODUCT_CREATE_FAIL,
   PRODUCT_UPDATE_REQUEST, PRODUCT_UPDATE_SUCCESS, PRODUCT_UPDATE_FAIL,
-  PRODUCT_RELATED_REQUEST,PRODUCT_RELATED_SUCCESS,PRODUCT_RELATED_FAIL,
+  PRODUCT_RELATED_REQUEST, PRODUCT_RELATED_SUCCESS, PRODUCT_RELATED_FAIL,
 } from './productReducers';
 
 // @desc Fetch PUBLIC products (Home, Category, Search, Filters)
 export const listProducts = (keyword = '', category = '', filters = {}) => async (dispatch) => {
   try {
-    dispatch({ type: PRODUCT_LIST_REQUEST })
+    dispatch({ type: PRODUCT_LIST_REQUEST });
 
-    let url = `/api/products/public?keyword=${keyword}&category=${category}`
+    let url = `/products/public?keyword=${keyword}&category=${category}`;
 
-    if (filters.minPrice) url += `&minPrice=${filters.minPrice}`
-    if (filters.maxPrice) url += `&maxPrice=${filters.maxPrice}`
-    if (filters.sort) url += `&sort=${filters.sort}`
+    if (filters.minPrice) url += `&minPrice=${filters.minPrice}`;
+    if (filters.maxPrice) url += `&maxPrice=${filters.maxPrice}`;
+    if (filters.sort) url += `&sort=${filters.sort}`;
 
-    const { data } = await api.get(url)
+    const { data } = await api.get(url);
 
-    dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data })
+    dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
       type: PRODUCT_LIST_FAIL,
-      payload:
-        error.response?.data?.message || error.message,
-    })
+      payload: error.response?.data?.message || error.message,
+    });
   }
-}
+};
 
 
-// @desc    Get single product details
+// @desc Get single product details
 export const listProductDetails = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAILS_REQUEST });
-    const { data } = await api.get(`/api/products/${id}`);
+
+    const { data } = await api.get(`/products/${id}`);
+
     dispatch({ type: PRODUCT_DETAILS_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({ 
-      type: PRODUCT_DETAILS_FAIL, 
-      payload: error.response?.data.message || error.message 
+    dispatch({
+      type: PRODUCT_DETAILS_FAIL,
+      payload: error.response?.data?.message || error.message,
     });
   }
 };
 
-// @desc    Admin: Create sample product
+
+// @desc Admin: Create sample product
 export const createProduct = () => async (dispatch, getState) => {
   try {
     dispatch({ type: PRODUCT_CREATE_REQUEST });
-    
+
     const { userLogin: { userInfo } } = getState();
-    const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-    
-    const { data } = await api.post('/api/products', {}, config);
-    
+    const config = {
+      headers: { Authorization: `Bearer ${userInfo.token}` }
+    };
+
+    const { data } = await api.post('/products', {}, config);
+
     dispatch({ type: PRODUCT_CREATE_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({ 
-      type: PRODUCT_CREATE_FAIL, 
-      payload: error.response?.data.message || error.message 
+    dispatch({
+      type: PRODUCT_CREATE_FAIL,
+      payload: error.response?.data?.message || error.message,
     });
   }
 };
 
-// @desc    Admin: Delete product
+
+// @desc Admin: Delete product
 export const deleteProduct = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: PRODUCT_DELETE_REQUEST });
-    
+
     const { userLogin: { userInfo } } = getState();
-    const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-    
-    await api.delete(`/api/products/${id}`, config);
-    
+    const config = {
+      headers: { Authorization: `Bearer ${userInfo.token}` }
+    };
+
+    await api.delete(`/products/${id}`, config);
+
     dispatch({ type: PRODUCT_DELETE_SUCCESS });
   } catch (error) {
-    dispatch({ 
-      type: PRODUCT_DELETE_FAIL, 
-      payload: error.response?.data.message || error.message 
+    dispatch({
+      type: PRODUCT_DELETE_FAIL,
+      payload: error.response?.data?.message || error.message,
     });
   }
 };
 
-// @desc    Admin: Update product details
+
+// @desc Admin: Update product
 export const updateProduct = (product) => async (dispatch, getState) => {
   try {
     dispatch({ type: PRODUCT_UPDATE_REQUEST });
-    
+
     const { userLogin: { userInfo } } = getState();
     const config = {
-      headers: { 
-        'Content-Type': 'application/json', 
-        Authorization: `Bearer ${userInfo.token}` 
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`
       },
     };
-    
-    const { data } = await api.put(`/api/products/${product._id}`, product, config);
-    
+
+    const { data } = await api.put(`/products/${product._id}`, product, config);
+
     dispatch({ type: PRODUCT_UPDATE_SUCCESS, payload: data });
   } catch (error) {
-    dispatch({ 
-      type: PRODUCT_UPDATE_FAIL, 
-      payload: error.response?.data.message || error.message 
+    dispatch({
+      type: PRODUCT_UPDATE_FAIL,
+      payload: error.response?.data?.message || error.message,
     });
   }
 };
-// @desc    Get related products
+
+
+// @desc Get related products
 export const listRelatedProducts = (id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_RELATED_REQUEST });
-    const { data } = await api.get(`/api/products/${id}/related`);
+
+    const { data } = await api.get(`/products/${id}/related`);
+
     dispatch({ type: PRODUCT_RELATED_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
       type: PRODUCT_RELATED_FAIL,
-      payload: error.response?.data.message || error.message,
+      payload: error.response?.data?.message || error.message,
     });
   }
 };

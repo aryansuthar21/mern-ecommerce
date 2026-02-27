@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { listProductDetails } from '../store/productActions'
 import HeartButton from '../components/HeartButton' 
 import RelatedProducts from '../components/RelatedProducts'
+import ReviewSection from '../components/ReviewSection'
 
 const ProductPage = () => {
   const { id } = useParams()
@@ -214,7 +215,12 @@ const ProductPage = () => {
               </div>
             </Col>
           </Row>
-
+          {/* REVIEWS SECTION */}
+{product && (
+  <div className="mt-5 border-top pt-5">
+    <ReviewSection product={product} />
+  </div>
+)}
           {/* RELATED PRODUCTS */}
           <div className="mt-5 border-top pt-5" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
              <RelatedProducts currentProductId={id} />

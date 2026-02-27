@@ -60,12 +60,13 @@ const orderSchema = mongoose.Schema(
       default: 0.0,
     },
 
+    // ✅ Shiprocket integration fields
     shiprocketOrderId: {
-    type: String,
+      type: String,
     },
 
     shiprocketShipmentId: {
-    type: String,
+      type: String,
     },
 
     totalPrice: {
@@ -83,12 +84,6 @@ const orderSchema = mongoose.Schema(
     paidAt: {
       type: Date,
     },
-    paymentResult: {
-  id: String,
-  status: String,
-  update_time: String,
-  email_address: String,
-}, 
 
     isDelivered: {
       type: Boolean,

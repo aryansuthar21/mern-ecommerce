@@ -91,23 +91,31 @@
 }
 
 /* -----------------------------------------
-   PRODUCT PAGE (DETAIL)
+   PRODUCT PAGE (DETAIL) – PREMIUM
 ----------------------------------------- */
+
 .product-page {
-    padding: 60px 0;
-}
-
-.product-layout {
-    max-width: 1200px;
+    padding: 100px 20px 120px;
+    max-width: 1320px;
     margin: 0 auto;
-    /* Consider using grid for layout if needed later */
 }
 
-/* Image */
+/* Proper grid layout */
+.product-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: start;
+}
+
+/* Sticky Image for luxury feel */
 .product-image-wrapper {
+    position: sticky;
+    top: 120px;
     width: 100%;
     aspect-ratio: 3 / 4;
     background: #f5f5f5;
+    border-radius: 6px;
     overflow: hidden;
 }
 
@@ -117,44 +125,42 @@
     object-fit: cover;
 }
 
-/* Info */
+/* Info Section */
 .product-info-wrapper {
-    padding-left: 40px;
+    padding-left: 0;
     display: flex;
     flex-direction: column;
 }
 
 .product-title {
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: -0.5px;
-    margin-bottom: 12px;
+    letter-spacing: -1px;
+    margin-bottom: 18px;
     color: #000;
 }
 
 .product-price-large {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     font-weight: 800;
-    margin-bottom: 24px;
+    margin-bottom: 30px;
     color: #000;
 }
 
 .product-description {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: #555;
-    line-height: 1.7;
-    margin-bottom: 40px;
-    max-width: 500px;
+    line-height: 1.9;
+    margin-bottom: 60px;
+    max-width: 480px;
 }
 
-/* Add to cart (UPDATED: H&M RED) */
+/* Add to cart – slightly elevated */
 .product-add-btn {
     background: #E50010;
-    /* 🔥 H&M Style Red */
     color: #fff;
     border: none;
-    padding: 16px 42px;
+    padding: 18px 60px;
     font-size: 0.8rem;
     font-weight: 800;
     letter-spacing: 1.5px;
@@ -162,13 +168,30 @@
     width: fit-content;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(229, 0, 16, 0.2);
+    box-shadow: 0 6px 20px rgba(229, 0, 16, 0.2);
 }
 
 .product-add-btn:hover {
     background: #b0000c;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(229, 0, 16, 0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(229, 0, 16, 0.3);
+}
+
+/* Responsive refinement */
+@media (max-width: 1000px) {
+    .product-layout {
+        grid-template-columns: 1fr;
+        gap: 50px;
+    }
+
+    .product-image-wrapper {
+        position: relative;
+        top: 0;
+    }
+
+    .product-info-wrapper {
+        padding-top: 20px;
+    }
 }
 
 /* -----------------------------------------

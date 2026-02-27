@@ -19,6 +19,8 @@ const paymentRoutes = require('./routes/paymentRoutes')
 const categoryRoutes = require('./routes/categoryRoutes')
 const wishlistRoutes = require('./routes/wishlistRoutes')
 const googleAuthRoutes = require('./routes/googleAuthRoutes')
+const reviewRoutes = require('./routes/reviewRoutes')
+const reviewUploadRoutes = require('./routes/reviewUploadRoutes')
 
 connectDB()
 
@@ -58,6 +60,8 @@ app.use('/api/payment', paymentRoutes)
 app.use('/api/auth/google', googleAuthRoutes)
 app.use('/api/categories', categoryRoutes)
 app.use('/api/wishlist', wishlistRoutes)
+app.use('/api/reviews', reviewRoutes)
+app.use('/api/review-upload', reviewUploadRoutes)
 
 /* =========================
    Uploads Static

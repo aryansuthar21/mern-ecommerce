@@ -1,0 +1,86 @@
+/* ===== TERMS PAGE WRAPPER ===== */
+
+.terms-wrapper {
+    min-height: 100vh;
+    padding-bottom: 60px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Light Mode */
+html:not(.dark) .terms-wrapper {
+    background: #f8f9fa;
+    color: #111;
+}
+
+/* Dark Mode */
+html.dark .terms-wrapper {
+    background: #0f0f0f;
+    color: #f1f1f1;
+}
+
+/* ===== HERO SECTION ===== */
+
+.terms-hero {
+    background: linear-gradient(135deg, #000000, #1c1c1c);
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.terms-hero h1 {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.terms-hero p {
+    opacity: 0.8;
+    margin-top: 10px;
+}
+
+/* ===== CONTENT ===== */
+
+.terms-container {
+    max-width: 900px;
+    margin: 60px auto 0;
+    padding: 0 20px;
+}
+
+.terms-section {
+    padding: 30px;
+    margin-bottom: 25px;
+    border-radius: 14px;
+    transition: all 0.3s ease;
+}
+
+/* Light */
+html:not(.dark) .terms-section {
+    background: #ffffff;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+/* Dark */
+html.dark .terms-section {
+    background: #1a1a1a;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+.terms-section h4 {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.terms-section p {
+    line-height: 1.8;
+    opacity: 0.9;
+}
+
+.terms-section:hover {
+    transform: translateY(-4px);
+}
+
+.terms-date {
+    margin-top: 40px;
+    font-size: 14px;
+    opacity: 0.6;
+}

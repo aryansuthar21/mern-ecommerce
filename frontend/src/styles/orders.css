@@ -313,3 +313,27 @@ html.dark .order-status.not-paid {
     /* Keep Red Pop */
     border-color: #333;
 }
+
+/* =========================================
+   🚚 TRACK ORDER LINK (ZARA STYLE MATCH)
+========================================= */
+
+.zara-track-link {
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    color: #000;
+    font-weight: 700;
+    margin-left: 14px;
+    border-bottom: 1px solid #000;
+    transition: all 0.2s ease;
+}
+
+.zara-track-link:hover {
+    opacity: 0.6;
+}
+
+/* 🌑 DARK MODE */
+html.dark .zara-track-link {
+    color: #ffffff;
+    border-bottom-color: #ffffff;
+}

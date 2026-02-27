@@ -5,27 +5,37 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 
 const AdminCategoryScreen = () => {
-  const [name, setName] = useState("");
-  const [parentId, setParentId] = useState("");
+  const { userInfo } = useSelector((state) => state.userLogin);
+
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
+  const [formData, setFormData] = useState({
+    name: "",
+    parent: "",
+    description: "",
+    sortOrder: 0,
+    isActive: true,
+    seoTitle: "",
+    seoDescription: "",
+  });
+
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
 
-  const { userInfo } = useSelector((state) => state.userLogin);
-
-  // 1. Fetch categories
+  /* ==============================================
+     FETCH TREE STRUCTURE
+  ============================================== */
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const { data } = await api.get("/api/categories");
-      setCategories(data);
+      const { data } = await api.get("/api/categories/tree");
+      setCategories(flattenTree(data));
       setLoading(false);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to fetch categories");
+      setError("Failed to fetch categories");
       setLoading(false);
     }
   };
@@ -34,16 +44,37 @@ const AdminCategoryScreen = () => {
     fetchCategories();
   }, []);
 
-  // 2. Reset form
-  const resetForm = () => {
-    setName("");
-    setParentId("");
-    setIsEditing(false);
-    setEditId(null);
-    // Don't reset success here or it disappears too fast
+  /* ==============================================
+     FLATTEN TREE FOR TABLE DISPLAY
+  ============================================== */
+  const flattenTree = (nodes, level = 0, parent = null) => {
+    let result = [];
+    nodes.forEach((node) => {
+      result.push({ ...node, level, parent });
+      if (node.children && node.children.length > 0) {
+        result = result.concat(
+          flattenTree(node.children, level + 1, node._id)
+        );
+      }
+    });
+    return result;
   };
 
-  // 3. Add / Update category
+  /* ==============================================
+     HANDLE FORM CHANGE
+  ============================================== */
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  /* ==============================================
+     SUBMIT
+  ============================================== */
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -53,7 +84,6 @@ const AdminCategoryScreen = () => {
 
       const config = {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
@@ -61,22 +91,20 @@ const AdminCategoryScreen = () => {
       if (isEditing) {
         await api.put(
           `/api/categories/${editId}`,
-          { name, parent: parentId || null },
-          config,
+          formData,
+          config
         );
       } else {
         await api.post(
           "/api/categories",
-          { name, parent: parentId || null },
-          config,
+          formData,
+          config
         );
       }
 
       setSuccess(true);
       resetForm();
       fetchCategories();
-
-      // Auto-hide success message after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
       setError(err.response?.data?.message || "Action failed");
@@ -84,36 +112,62 @@ const AdminCategoryScreen = () => {
     }
   };
 
-  // 4. Delete category
+  /* ==============================================
+     EDIT
+  ============================================== */
+  const editHandler = (cat) => {
+    setIsEditing(true);
+    setEditId(cat._id);
+
+    setFormData({
+      name: cat.name || "",
+      parent: cat.parent || "",
+      description: cat.description || "",
+      sortOrder: cat.sortOrder || 0,
+      isActive: cat.isActive,
+      seoTitle: cat.seoTitle || "",
+      seoDescription: cat.seoDescription || "",
+    });
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  /* ==============================================
+     DISABLE CATEGORY
+  ============================================== */
   const deleteHandler = async (id) => {
-    if (
-      window.confirm(
-        'Are you sure? Deleting a parent category will make its children "Root" categories.',
-      )
-    ) {
-      try {
-        setLoading(true);
-        const config = {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        };
-        await api.delete(`/api/categories/${id}`, config);
-        fetchCategories();
-        setLoading(false);
-      } catch (err) {
-        setError(err.response?.data?.message || "Delete failed");
-        setLoading(false);
-      }
+    if (!window.confirm("Disable this category?")) return;
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+
+      await api.delete(`/api/categories/${id}`, config);
+      fetchCategories();
+    } catch (err) {
+      setError(err.response?.data?.message || "Delete failed");
     }
   };
 
-  // 5. Edit mode toggle
-  const editHandler = (category) => {
-    setIsEditing(true);
-    setEditId(category._id);
-    setName(category.name);
-    // Extract ID whether it's populated or just a string
-    setParentId(category.parent?._id || category.parent || "");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  /* ==============================================
+     RESET FORM
+  ============================================== */
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      parent: "",
+      description: "",
+      sortOrder: 0,
+      isActive: true,
+      seoTitle: "",
+      seoDescription: "",
+    });
+
+    setIsEditing(false);
+    setEditId(null);
   };
 
   return (
@@ -125,51 +179,110 @@ const AdminCategoryScreen = () => {
       {loading && <Loader />}
       {error && <Message variant="danger">{error}</Message>}
       {success && (
-        <Message variant="success">Category successfully saved!</Message>
+        <Message variant="success">
+          Category saved successfully!
+        </Message>
       )}
 
+      {/* ================= FORM ================= */}
       <form
         onSubmit={submitHandler}
         className="admin-form shadow-sm p-4 mb-5 bg-white rounded"
       >
-        <div className="form-group mb-3">
-          <label className="form-label">Category Name</label>
+        <div className="mb-3">
+          <label>Name</label>
           <input
             className="form-control"
-            placeholder="e.g. Shirts, Jeans, Dresses..."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
             required
           />
         </div>
 
-        <div className="form-group mb-4">
-          <label className="form-label">
-            Parent Department (Select "None" to create a main link)
-          </label>
+        <div className="mb-3">
+          <label>Parent Category</label>
           <select
             className="form-select"
-            value={parentId}
-            onChange={(e) => setParentId(e.target.value)}
+            name="parent"
+            value={formData.parent}
+            onChange={handleChange}
           >
-            <option value="">None (Main Category)</option>
+            <option value="">None (Root)</option>
             {categories
-              .filter((c) => !c.parent && c._id !== editId) // 🛡️ Prevent self-parenting
+              .filter((c) => c._id !== editId)
               .map((cat) => (
                 <option key={cat._id} value={cat._id}>
+                  {"— ".repeat(cat.level)}
                   {cat.name}
                 </option>
               ))}
           </select>
         </div>
 
-        <div className="admin-actions d-flex gap-2">
-          <button
-            type="submit"
-            className="admin-btn btn btn-dark"
-            disabled={loading}
-          >
-            {isEditing ? "Update Category" : "Create Category"}
+        <div className="mb-3">
+          <label>Description</label>
+          <textarea
+            className="form-control"
+            name="description"
+            rows="3"
+            value={formData.description}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label>Sort Order</label>
+          <input
+            type="number"
+            className="form-control"
+            name="sortOrder"
+            value={formData.sortOrder}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-check mb-3">
+          <input
+            type="checkbox"
+            className="form-check-input"
+            name="isActive"
+            checked={formData.isActive}
+            onChange={handleChange}
+          />
+          <label className="form-check-label">
+            Active (Visible on Store)
+          </label>
+        </div>
+
+        <hr />
+
+        <h5>SEO Settings</h5>
+
+        <div className="mb-3">
+          <label>SEO Title</label>
+          <input
+            className="form-control"
+            name="seoTitle"
+            value={formData.seoTitle}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="mb-3">
+          <label>SEO Description</label>
+          <textarea
+            className="form-control"
+            name="seoDescription"
+            rows="2"
+            value={formData.seoDescription}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="d-flex gap-2">
+          <button type="submit" className="btn btn-dark">
+            {isEditing ? "Update" : "Create"}
           </button>
 
           {isEditing && (
@@ -178,59 +291,60 @@ const AdminCategoryScreen = () => {
               className="btn btn-outline-secondary"
               onClick={resetForm}
             >
-              Cancel Edit
+              Cancel
             </button>
           )}
         </div>
       </form>
 
-      <hr />
+      {/* ================= TABLE ================= */}
+      <h3>All Categories</h3>
 
-      <h2 className="mt-4 mb-3">Existing Collections</h2>
+      <table className="table table-bordered">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Slug</th>
+            <th>Sort</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-      <div className="table-responsive">
-        <table className="admin-table table table-hover">
-          <thead className="table-light">
-            <tr>
-              <th>NAME</th>
-              <th>PARENT DEPT</th>
-              <th>SLUG</th>
-              <th className="text-end">ACTIONS</th>
+        <tbody>
+          {categories.map((cat) => (
+            <tr key={cat._id}>
+              <td>
+                {"— ".repeat(cat.level)}
+                {cat.name}
+              </td>
+              <td>/{cat.slug}</td>
+              <td>{cat.sortOrder}</td>
+              <td>
+                {cat.isActive ? (
+                  <span className="badge bg-success">Active</span>
+                ) : (
+                  <span className="badge bg-danger">Disabled</span>
+                )}
+              </td>
+              <td>
+                <button
+                  className="btn btn-sm btn-outline-primary me-2"
+                  onClick={() => editHandler(cat)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="btn btn-sm btn-outline-danger"
+                  onClick={() => deleteHandler(cat._id)}
+                >
+                  Disable
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {categories.map((cat) => (
-              <tr key={cat._id}>
-                <td className="fw-bold">{cat.name}</td>
-                <td>
-                  {cat.parent ? (
-                    <span className="badge bg-info text-dark">
-                      {cat.parent.name || "Sub-category"}
-                    </span>
-                  ) : (
-                    <span className="badge bg-secondary">Main Dept</span>
-                  )}
-                </td>
-                <td className="text-muted small">/{cat.slug}</td>
-                <td className="text-end">
-                  <button
-                    className="btn btn-sm btn-outline-primary me-2"
-                    onClick={() => editHandler(cat)}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="btn btn-sm btn-outline-danger"
-                    onClick={() => deleteHandler(cat._id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </section>
   );
 };
