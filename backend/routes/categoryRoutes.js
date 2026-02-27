@@ -188,19 +188,27 @@ router.get(
   asyncHandler(async (req, res) => {
     const categories = await Category.find({}).lean();
 
-    // Build map
     const map = {};
     categories.forEach((cat) => {
-      map[cat._id] = { ...cat, children: [] };
+      map[cat._id.toString()] = {
+        ...cat,
+        children: [],
+      };
     });
 
     const tree = [];
 
     categories.forEach((cat) => {
       if (cat.parent) {
-        map[cat.parent]?.children.push(map[cat._id]);
+        const parentId = cat.parent.toString();
+
+        if (map[parentId]) {
+          map[parentId].children.push(
+            map[cat._id.toString()]
+          );
+        }
       } else {
-        tree.push(map[cat._id]);
+        tree.push(map[cat._id.toString()]);
       }
     });
 
