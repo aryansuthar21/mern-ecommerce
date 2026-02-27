@@ -54,6 +54,7 @@ router.post(
       description,
       sortOrder: sortOrder || 0,
       level,
+      isActive: true,
     });
 
     res.status(201).json(category);
@@ -61,7 +62,7 @@ router.post(
 );
 
 /* ===========================================================
-   GET TREE STRUCTURE (Public)
+   GET CATEGORY TREE (Public)
 =========================================================== */
 router.get(
   "/tree",
@@ -71,27 +72,58 @@ router.get(
       .lean();
 
     const map = {};
-    const roots = [];
+    const tree = [];
 
+    // Create lookup map
     categories.forEach((cat) => {
-      cat.children = [];
-      map[cat._id] = cat;
+      map[cat._id.toString()] = {
+        _id: cat._id,
+        name: cat.name,
+        slug: cat.slug,
+        bannerImage: cat.bannerImage,
+        description: cat.description,
+        sortOrder: cat.sortOrder,
+        level: cat.level,
+        parent: cat.parent,
+        children: [],
+      };
     });
 
+    // Build nested structure
     categories.forEach((cat) => {
-      if (cat.parent) {
-        map[cat.parent]?.children.push(cat);
+      if (cat.parent === null) {
+        tree.push(map[cat._id.toString()]);
       } else {
-        roots.push(cat);
+        const parentId = cat.parent?.toString();
+        if (map[parentId]) {
+          map[parentId].children.push(
+            map[cat._id.toString()]
+          );
+        }
       }
     });
 
-    res.json(roots);
+    res.json(tree);
   })
 );
 
 /* ===========================================================
-   UPDATE CATEGORY (SAFE SLUG)
+   GET ALL CATEGORIES (Flat List - Admin)
+=========================================================== */
+router.get(
+  "/",
+  protect,
+  admin,
+  asyncHandler(async (req, res) => {
+    const categories = await Category.find({})
+      .sort({ sortOrder: 1, createdAt: 1 });
+
+    res.json(categories);
+  })
+);
+
+/* ===========================================================
+   UPDATE CATEGORY
 =========================================================== */
 router.put(
   "/:id",
@@ -156,6 +188,7 @@ router.delete(
 
     const childExists = await Category.findOne({
       parent: category._id,
+      isActive: true,
     });
 
     if (childExists) {
@@ -178,59 +211,5 @@ router.delete(
     res.json({ message: "Category disabled successfully" });
   })
 );
-
-// ============================================================
-// ✅ GET CATEGORY TREE (PUBLIC)
-// @route   GET /api/categories/tree
-// ============================================================
-router.get(
-  "/tree",
-  asyncHandler(async (req, res) => {
-    const categories = await Category.find({}).lean();
-
-    const map = {};
-    const tree = [];
-
-    // First create map
-    categories.forEach((cat) => {
-      map[cat._id.toString()] = {
-        _id: cat._id,
-        name: cat.name,
-        slug: cat.slug,
-        parent: cat.parent,
-        bannerImage: cat.bannerImage,
-        children: [],
-      };
-    });
-
-    // Then build tree
-    categories.forEach((cat) => {
-      if (cat.parent === null) {
-        tree.push(map[cat._id.toString()]);
-      } else {
-        const parentId = cat.parent?.toString();
-        if (map[parentId]) {
-          map[parentId].children.push(
-            map[cat._id.toString()]
-          );
-        }
-      }
-    });
-
-    res.json(tree);
-  })
-);
-router.get('/fix-parents', asyncHandler(async (req, res) => {
-  const categories = await Category.find({})
-
-  for (let cat of categories) {
-    if (cat.parent && typeof cat.parent === 'object') {
-      cat.parent = cat.parent._id
-      await cat.save()
-    }
-  }
-
-  res.json({ message: "Parent fields fixed" })
-}))
 
 module.exports = router;
