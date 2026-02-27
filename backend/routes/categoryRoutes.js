@@ -67,34 +67,23 @@ router.post(
 router.get(
   "/tree",
   asyncHandler(async (req, res) => {
-    const categories = await Category.find({ isActive: true })
-      .sort({ sortOrder: 1, createdAt: 1 })
-      .lean();
+    const categories = await Category.find({}).lean();
 
     const map = {};
     const tree = [];
 
-    // Create lookup map
     categories.forEach((cat) => {
       map[cat._id.toString()] = {
-        _id: cat._id,
-        name: cat.name,
-        slug: cat.slug,
-        bannerImage: cat.bannerImage,
-        description: cat.description,
-        sortOrder: cat.sortOrder,
-        level: cat.level,
-        parent: cat.parent,
+        ...cat,
         children: [],
       };
     });
 
-    // Build nested structure
     categories.forEach((cat) => {
-      if (cat.parent === null) {
+      if (!cat.parent) {
         tree.push(map[cat._id.toString()]);
       } else {
-        const parentId = cat.parent?.toString();
+        const parentId = cat.parent.toString();
         if (map[parentId]) {
           map[parentId].children.push(
             map[cat._id.toString()]
