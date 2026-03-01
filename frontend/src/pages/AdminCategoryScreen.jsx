@@ -39,7 +39,7 @@ const AdminCategoryScreen = () => {
       },
     };
 
-    const { data } = await api.get("/api/categories", config);
+    const { data } = await api.get("/categories", config);
 
     setCategories(
       data.map((cat) => ({
@@ -101,13 +101,13 @@ const AdminCategoryScreen = () => {
 
       if (isEditing) {
         await api.put(
-          `/api/categories/${editId}`,
+          `/categories/${editId}`,
           formData,
           config
         );
       } else {
         await api.post(
-          "/api/categories",
+          "/categories",
           formData,
           config
         );
@@ -156,7 +156,7 @@ const AdminCategoryScreen = () => {
         },
       };
 
-      await api.delete(`/api/categories/${id}`, config);
+      await api.delete(`/categories/${id}`, config);
       fetchCategories();
     } catch (err) {
       setError(err.response?.data?.message || "Delete failed");
