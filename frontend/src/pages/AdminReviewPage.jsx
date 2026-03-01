@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import axios from 'axios'
 import { useSelector } from 'react-redux'
+import api from '../utils/api'
 
 const AdminReviewPage = () => {
   const [reviews, setReviews] = useState([])
   const [loading, setLoading] = useState(false)
 
-  const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
+  const { userInfo } = useSelector((state) => state.userLogin)
 
   const fetchReviews = async () => {
     try {
       setLoading(true)
 
-      const { data } = await axios.get('/api/reviews', {
+      const { data } = await api.get('/reviews', {
         headers: {
           Authorization: `Bearer ${userInfo.token}`,
         },
@@ -32,8 +31,8 @@ const AdminReviewPage = () => {
   }, [])
 
   const approveReview = async (id) => {
-    await axios.patch(
-      `/api/reviews/${id}/approve`,
+    await api.patch(
+      `/reviews/${id}/approve`,
       {},
       {
         headers: {
@@ -46,7 +45,7 @@ const AdminReviewPage = () => {
   }
 
   const deleteReview = async (id) => {
-    await axios.delete(`/api/reviews/${id}`, {
+    await api.delete(`/reviews/${id}`, {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
       },
@@ -75,7 +74,6 @@ const AdminReviewPage = () => {
           <p><strong>Rating:</strong> {review.rating} ⭐</p>
           <p>{review.comment}</p>
 
-          {/* Images */}
           {review.images?.length > 0 && (
             <div style={{ display: 'flex', gap: '10px' }}>
               {review.images.map((img, index) => (

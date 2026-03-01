@@ -29,20 +29,31 @@ const AdminCategoryScreen = () => {
      FETCH TREE STRUCTURE
   ============================================== */
   const fetchCategories = async () => {
-    try {
-      setLoading(true);
-      const { data } = await api.get("/api/categories/tree");
-      setCategories(flattenTree(data));
-      setLoading(false);
-    } catch (err) {
-      setError("Failed to fetch categories");
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+    setError(null);
 
-  useEffect(() => {
-    fetchCategories();
-  }, []);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await api.get("/api/categories", config);
+
+    setCategories(
+      data.map((cat) => ({
+        ...cat,
+        level: cat.level || 0,
+      }))
+    );
+
+    setLoading(false);
+  } catch (err) {
+    setError("Failed to fetch categories");
+    setLoading(false);
+  }
+};
 
   /* ==============================================
      FLATTEN TREE FOR TABLE DISPLAY

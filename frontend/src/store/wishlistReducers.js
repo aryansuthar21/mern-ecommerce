@@ -62,7 +62,7 @@ export const getUserWishlist = () => async (dispatch, getState) => {
     if (!userInfo) return;
 
     const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-    const { data } = await api.get("/api/wishlist", config);
+    const { data } = await api.get("/wishlist", config);
 
     dispatch({ type: WISHLIST_SUCCESS, payload: data });
   } catch (error) {
@@ -89,7 +89,7 @@ export const addToWishlist = (productId) => async (dispatch, getState) => {
     }
 
     const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-    const { data } = await api.post("/api/wishlist", { productId }, config);
+    const { data } = await api.post("/wishlist", { productId }, config);
 
     dispatch({ type: WISHLIST_ADD_SUCCESS, payload: data });
   } catch (error) {
@@ -110,7 +110,7 @@ export const removeFromWishlist = (productId) => async (dispatch, getState) => {
     } = getState();
     const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
 
-    const { data } = await api.delete(`/api/wishlist/${productId}`, config);
+    const { data } = await api.delete(`/wishlist/${productId}`, config);
 
     dispatch({ type: WISHLIST_REMOVE_SUCCESS, payload: data });
   } catch (error) {

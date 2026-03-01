@@ -20,7 +20,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await api.post("/api/orders", order, config);
+    const { data } = await api.post("/orders", order, config);
 
     dispatch({
       type: "ORDER_CREATE_SUCCESS",
@@ -51,7 +51,7 @@ export const getOrderDetails = (id) => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await api.get(`/api/orders/${id}`, config);
+    const { data } = await api.get(`/orders/${id}`, config);
 
     dispatch({
       type: "ORDER_DETAILS_SUCCESS",
@@ -80,7 +80,7 @@ export const listOrders = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await api.get("/api/orders", config);
+    const { data } = await api.get("/orders", config);
 
     dispatch({
       type: "ORDER_LIST_SUCCESS",
@@ -110,7 +110,7 @@ export const deliverOrder = (orderId) => async (dispatch, getState) => {
     };
 
     const { data } = await api.put(
-      `/api/orders/${orderId}/deliver`,
+      `/orders/${orderId}/deliver`,
       {},
       config,
     );
@@ -142,7 +142,7 @@ export const listMyOrders = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await api.get("/api/orders/myorders", config);
+    const { data } = await api.get("/orders/myorders", config);
 
     dispatch({
       type: ORDER_LIST_MY_SUCCESS,

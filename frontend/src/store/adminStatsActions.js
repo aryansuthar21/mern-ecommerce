@@ -14,7 +14,7 @@ export const getAdminStats = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await api.get("/api/admin/stats", config);
+    const { data } = await api.get("/admin/stats", config);
 
     dispatch({
       type: "ADMIN_STATS_SUCCESS",

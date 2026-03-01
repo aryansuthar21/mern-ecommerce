@@ -14,7 +14,7 @@ export const getAdminDashboard = () => async (dispatch, getState) => {
       },
     };
 
-    const { data } = await api.get("/api/orders/admin/summary", config);
+    const { data } = await api.get("/orders/admin/summary", config);
 
     dispatch({
       type: "ADMIN_DASHBOARD_SUCCESS",

@@ -36,7 +36,7 @@ export const login = (email, password) => async (dispatch) => {
     dispatch({ type: USER_LOGIN_REQUEST });
 
     const { data } = await api.post(
-      "/api/users/login",
+      "/users/login",
       { email, password },
       { headers: { "Content-Type": "application/json" } },
     );
@@ -59,7 +59,7 @@ export const googleLogin = (token) => async (dispatch) => {
     dispatch({ type: USER_LOGIN_REQUEST });
 
     const { data } = await api.post(
-      "/api/auth/google",
+      "/auth/google",
       { token },
       { headers: { "Content-Type": "application/json" } },
     );
@@ -83,7 +83,7 @@ export const register = (name, email, password) => async (dispatch) => {
     dispatch({ type: USER_REGISTER_REQUEST });
 
     const { data } = await api.post(
-      "/api/users",
+      "/users",
       { name, email, password },
       { headers: { "Content-Type": "application/json" } },
     );
@@ -111,7 +111,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const { data } = await api.get(`/api/users/${id}`, {
+    const { data } = await api.get(`/users/${id}`, {
       headers: { Authorization: `Bearer ${userInfo.token}` },
     });
 
@@ -142,7 +142,7 @@ export const updateProfile = (user) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const { data } = await api.put("/api/users/profile", user, {
+    const { data } = await api.put("/users/profile", user, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${userInfo.token}`,
@@ -183,7 +183,7 @@ export const listUsers = () => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const { data } = await api.get("/api/users", {
+    const { data } = await api.get("/users", {
       headers: { Authorization: `Bearer ${userInfo.token}` },
     });
 
@@ -207,7 +207,7 @@ export const deleteUser = (id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    await api.delete(`/api/users/${id}`, {
+    await api.delete(`/users/${id}`, {
       headers: { Authorization: `Bearer ${userInfo.token}` },
     });
 

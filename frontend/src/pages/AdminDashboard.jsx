@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../utils/api'
 
 import {
   AreaChart,
@@ -42,20 +42,19 @@ const AdminDashboard = () => {
   const [pendingReviewCount, setPendingReviewCount] = useState(0)
 
   const fetchPendingReviewCount = async () => {
-    try {
-      const { data } = await axios.get('/api/reviews', {
-        headers: {
-          Authorization: `Bearer ${userInfo.token}`,
-        },
-      })
+  try {
+    const { data } = await api.get('/reviews', {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    })
 
-      const pending = data.filter((r) => !r.isApproved)
-      setPendingReviewCount(pending.length)
-    } catch (error) {
-      console.error(error)
-    }
+    const pending = data.filter((r) => !r.isApproved)
+    setPendingReviewCount(pending.length)
+  } catch (error) {
+    console.error(error)
   }
-
+}
   // ================= EFFECT =================
   useEffect(() => {
     if (!userInfo || !userInfo.isAdmin) {
